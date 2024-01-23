@@ -18,6 +18,7 @@ import java.math.BigInteger;
 import java.util.*;
 
 import static io.nats.client.support.JsonEncoding.jsonEncode;
+import static io.nats.client.support.JsonUtils.*;
 
 public class JsonValue implements JsonSerializable {
 
@@ -235,38 +236,6 @@ public class JsonValue implements JsonSerializable {
             sba.append(COMMA);
         }
         return endArray(sba).toString();
-    }
-
-    private static void addField(StringBuilder sb, String fname, JsonSerializable value) {
-        if (value != null) {
-            sb.append('"');
-            jsonEncode(sb, fname);
-            sb.append("\":").append(value.toJson()).append(COMMA);
-        }
-    }
-
-    private static StringBuilder beginArray() {
-        return new StringBuilder("[");
-    }
-
-    private static StringBuilder endJson(StringBuilder sb) {
-        int lastIndex = sb.length() - 1;
-        if (sb.charAt(lastIndex) == ',') {
-            sb.setCharAt(lastIndex, '}');
-            return sb;
-        }
-        sb.append("}");
-        return sb;
-    }
-
-    private static StringBuilder endArray(StringBuilder sb) {
-        int lastIndex = sb.length() - 1;
-        if (sb.charAt(lastIndex) == ',') {
-            sb.setCharAt(lastIndex, ']');
-            return sb;
-        }
-        sb.append("]");
-        return sb;
     }
 
     @Override
