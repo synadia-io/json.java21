@@ -27,4 +27,8 @@ public abstract class ResourceUtils {
             throw new RuntimeException(e);
         }
     }
+
+    public static String resourceAsString(String filename) {
+        return new String(resourceAsBytes(filename));
+    }
 }
