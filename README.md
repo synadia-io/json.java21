@@ -4,7 +4,7 @@
 
 This library is a JSON Parser built specifically for JNATS to avoid any 3rd party library dependency.
 
-It works
+It has been extracted from the java library since it is also used by the [jwt.java](https://github.com/nats-io/jwt.java) library.
 
 **Current Release**: 0.0.0 &nbsp; **Current Snapshot**: 1.5.0-SNAPSHOT
 
