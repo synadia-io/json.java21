@@ -333,11 +333,6 @@ public abstract class JsonValueUtils {
         public JsonValue toJsonValue() {
             return jv;
         }
-
-        @Deprecated
-        public JsonValue getJsonValue() {
-            return jv;
-        }
     }
 
     public static ArrayBuilder arrayBuilder() {

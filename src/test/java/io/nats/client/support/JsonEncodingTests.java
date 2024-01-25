@@ -1,4 +1,4 @@
-// Copyright 2015-2018 The NATS Authors
+// Copyright 2015-2024 The NATS Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -18,8 +18,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static io.nats.client.support.JsonEncoding.jsonDecode;
-import static io.nats.client.support.JsonEncoding.jsonEncode;
+import static io.nats.client.support.Encoding.jsonDecode;
+import static io.nats.client.support.Encoding.jsonEncode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public final class JsonEncodingTests {

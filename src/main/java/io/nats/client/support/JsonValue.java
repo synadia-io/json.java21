@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
-import static io.nats.client.support.JsonEncoding.jsonEncode;
+import static io.nats.client.support.Encoding.jsonEncode;
 import static io.nats.client.support.JsonUtils.*;
 
 public class JsonValue implements JsonSerializable {

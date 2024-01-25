@@ -13,8 +13,69 @@
 
 package io.nats.client.support;
 
-public abstract class JsonEncoding {
-    private JsonEncoding() {}  /* ensures cannot be constructed */
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
+public abstract class Encoding {
+    private Encoding() {}  /* ensures cannot be constructed */
+
+    /**
+     * base64 url encode a byte array to a byte array
+     * @param input the input byte array to encode
+     * @return the encoded byte array
+     * @deprecated prefer base64UrlEncode
+     */
+    @Deprecated
+    public static byte[] base64Encode(byte[] input) {
+        return Base64.getUrlEncoder().withoutPadding().encode(input);
+    }
+
+    /**
+     * base64 url encode a byte array to a byte array
+     * @param input the input byte array to encode
+     * @return the encoded byte array
+     */
+    public static byte[] base64UrlEncode(byte[] input) {
+        return Base64.getUrlEncoder().withoutPadding().encode(input);
+    }
+
+    /**
+     * base64 url encode a byte array to a string
+     * @param input the input byte array to encode
+     * @return the encoded string
+     */
+    public static String toBase64Url(byte[] input) {
+        return new String(base64UrlEncode(input));
+    }
+
+    /**
+     * base64 url encode a string to a string
+     * @param input the input string to encode
+     * @return the encoded string
+     */
+    public static String toBase64Url(String input) {
+        return new String(base64UrlEncode(input.getBytes(StandardCharsets.US_ASCII)));
+    }
+
+    /**
+     * base64 url decode a byte array
+     * @param input the input byte array to decode
+     * @return the decoded byte array
+     */
+    public static byte[] base64UrlDecode(byte[] input) {
+        return Base64.getUrlDecoder().decode(input);
+    }
+
+    /**
+     * get a string from a base64 url encoded byte array
+     * @param input the input string to decode
+     * @return the decoded string
+     */
+    public static String fromBase64Url(String input) {
+        return new String(base64UrlDecode(input.getBytes(StandardCharsets.US_ASCII)));
+    }
 
     public static String jsonDecode(String s) {
         int len = s.length();
@@ -108,5 +169,13 @@ public abstract class JsonEncoding {
             }
         }
         return sb;
+    }
+
+    public static String uriDecode(String source) {
+        try {
+            return URLDecoder.decode(source.replace("+", "%2B"), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return source;
+        }
     }
 }

@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static io.nats.client.support.DateTimeUtils.DEFAULT_TIME;
-import static io.nats.client.support.JsonEncoding.jsonEncode;
+import static io.nats.client.support.Encoding.jsonEncode;
 import static io.nats.client.support.JsonValueUtils.instance;
 
 /**

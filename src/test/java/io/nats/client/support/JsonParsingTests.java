@@ -25,7 +25,7 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.*;
 
-import static io.nats.client.support.JsonEncoding.jsonEncode;
+import static io.nats.client.support.Encoding.jsonEncode;
 import static io.nats.client.support.JsonParser.*;
 import static io.nats.client.support.JsonParser.Option.KEEP_NULLS;
 import static io.nats.client.support.JsonValueUtils.*;
@@ -814,8 +814,6 @@ public final class JsonParsingTests {
             .put("jvNull", JsonValue.NULL)
             .put("empty_is_null", "");
         validateMap(false, false, builder.toJsonValue());
-        //noinspection deprecation
-        validateMap(false, false, builder.getJsonValue()); // coverage for deprecated
         validateMap(false, true, JsonParser.parseUnchecked(builder.toJson()));
     }
 
@@ -896,8 +894,6 @@ public final class JsonParsingTests {
             .add(null)
             .add(JsonValue.NULL);
         validateArray(false, false, builder.toJsonValue());
-        //noinspection deprecation
-        validateArray(false, false, builder.getJsonValue()); // coverage for deprecated
         validateArray(false, true, JsonParser.parseUnchecked(builder.toJson()));
     }
 
