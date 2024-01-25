@@ -77,7 +77,7 @@ public final class JsonParsingTests {
         addField(key(x++), "has/fwd/slash", oMap, list, encodeds, decodeds);
         addField(key(x++), "has\\back\\slash", oMap, list, encodeds, decodeds);
         addField(key(x++), "has=equals", oMap, list, encodeds, decodeds);
-        addField(key(x++), "has`tic", oMap, list, encodeds, decodeds);
+        addField(key(x), "has`tic", oMap, list, encodeds, decodeds);
 
         for (int i = 0; i < list.size(); i++) {
             JsonValue v = list.get(i);
