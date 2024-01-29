@@ -432,7 +432,7 @@ public class JsonParser {
         throw new JsonParseException("val ["+val+"] is not a valid number.");
     }
 
-    private boolean isDecimalNotation(final String val) {
+    static boolean isDecimalNotation(final String val) {
         return val.indexOf('.') > -1 || val.indexOf('e') > -1
             || val.indexOf('E') > -1 || "-0".equals(val);
     }

@@ -18,8 +18,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static io.nats.client.support.Encoding.jsonDecode;
-import static io.nats.client.support.Encoding.jsonEncode;
+import static io.nats.client.support.Encoding.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public final class JsonEncodingTests {
@@ -67,5 +67,37 @@ public final class JsonEncodingTests {
         else {
             assertEquals(targetEncode, encoded);
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test
+    public void testBase64Encoding() {
+        String text = "blahblah";
+        byte[] btxt = text.getBytes();
+        String surl = "https://nats.io/";
+        byte[] burl = surl.getBytes();
+
+        byte[] encBytes = Encoding.base64Encode(btxt);
+        byte[] uencBytes = Encoding.base64UrlEncode(btxt);
+        assertEquals("YmxhaGJsYWg", new String(encBytes));
+        assertEquals("YmxhaGJsYWg", new String(uencBytes));
+        assertEquals("YmxhaGJsYWg", toBase64Url(text));
+        assertEquals("YmxhaGJsYWg", toBase64Url(btxt));
+        assertEquals(text, fromBase64Url("YmxhaGJsYWg"));
+        assertArrayEquals(btxt, base64UrlDecode(encBytes));
+        assertArrayEquals(btxt, base64UrlDecode(uencBytes));
+
+        //noinspection deprecation
+        encBytes = Encoding.base64Encode(burl);
+        uencBytes = Encoding.base64UrlEncode(burl);
+        assertEquals("aHR0cHM6Ly9uYXRzLmlvLw", new String(encBytes));
+        assertEquals("aHR0cHM6Ly9uYXRzLmlvLw", new String(uencBytes));
+        assertEquals("aHR0cHM6Ly9uYXRzLmlvLw", toBase64Url(surl));
+        assertEquals("aHR0cHM6Ly9uYXRzLmlvLw", toBase64Url(burl));
+        assertEquals(surl, fromBase64Url("aHR0cHM6Ly9uYXRzLmlvLw"));
+        assertArrayEquals(burl, base64UrlDecode(encBytes));
+        assertArrayEquals(burl, base64UrlDecode(uencBytes));
+
+        assertEquals("+ hello world", uriDecode("+%20hello%20world"));
     }
 }

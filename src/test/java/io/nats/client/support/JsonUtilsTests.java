@@ -16,6 +16,7 @@ package io.nats.client.support;
 import io.ResourceUtils;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +38,8 @@ public final class JsonUtilsTests {
 
         sb = beginFormattedJson();
         addField(sb, "name", "value");
-        endFormattedJson(sb);
+        String ended = endFormattedJson(sb);
+        assertEquals("{\n    \"name\":\"value\"\n}", ended);
         assertEquals("{\n    \"name\":\"value\"\n}", sb.toString());
 
         sb = beginJsonPrefixed(null);
@@ -150,6 +152,9 @@ public final class JsonUtilsTests {
         addField(sb, "zdt", DateTimeUtils.gmtNow());
         assertEquals(149, sb.length());
 
+        addFieldWhenGreaterThan(sb, "xgt", null, 1);
+        assertEquals(149, sb.length());
+
         addFieldWhenGreaterThan(sb, "xgt", 0L, 1);
         assertEquals(149, sb.length());
 
@@ -158,6 +163,111 @@ public final class JsonUtilsTests {
 
         addFieldWhenGreaterThan(sb, "xgt", 2L, 1);
         assertEquals(157, sb.length());
+
+        addRawJson(sb, "n/a", null);
+        assertEquals(157, sb.length());
+
+        addRawJson(sb, "n/a", "");
+        assertEquals(157, sb.length());
+
+        addRawJson(sb, "raw", "raw");
+        assertEquals(167, sb.length());
+
+        addFieldEvenEmpty(sb, "ee1", null);
+        assertEquals(176, sb.length());
+
+        addFieldEvenEmpty(sb, "ee2", "");
+        assertEquals(185, sb.length());
+
+        addFieldWhenGteMinusOne(sb, "n/a", null);
+        assertEquals(185, sb.length());
+
+        addFieldWhenGteMinusOne(sb, "n/a", -2L);
+        assertEquals(185, sb.length());
+
+        addFieldWhenGteMinusOne(sb, "gtem1", -1L);
+        assertEquals(196, sb.length());
+
+        addFieldAsNanos(sb, "n/a", null);
+        assertEquals(196, sb.length());
+
+        addFieldAsNanos(sb, "n/a", Duration.ZERO);
+        assertEquals(196, sb.length());
+
+        addFieldAsNanos(sb, "n/a", Duration.ofNanos(-1));
+        assertEquals(196, sb.length());
+
+        addFieldAsNanos(sb, "fan", Duration.ofNanos(1000000));
+        assertEquals(210, sb.length());
+
+        addEnumWhenNot(sb, "n/a", null, JsonValue.Type.STRING);
+        assertEquals(210, sb.length());
+
+        addEnumWhenNot(sb, "n/a", JsonValue.Type.STRING, JsonValue.Type.STRING);
+        assertEquals(210, sb.length());
+
+        addEnumWhenNot(sb, "ewn", JsonValue.Type.STRING, JsonValue.Type.LONG);
+        assertEquals(225, sb.length());
+
+        //noinspection unchecked
+        addField(sb, "n/a", (Map)null);
+        assertEquals(225, sb.length());
+
+        Map<String, String> map = new HashMap<>();
+        addField(sb, "n/a", map);
+        assertEquals(225, sb.length());
+
+        map.put("mfoo", "mbar");
+        addField(sb, "afmap", map);
+        assertEquals(249, sb.length());
+
+        addFldWhenTrue(sb, "whentrue", true);
+        assertEquals(265, sb.length());
+
+        _addList(sb, "al1", new ArrayList<>(), StringBuilder::append);
+        assertEquals(274, sb.length());
+
+        List<Integer> ilist = new ArrayList<>();
+        _addList(sb, "al2", ilist, StringBuilder::append);
+        assertEquals(283, sb.length());
+
+        ilist.add(1);
+        _addList(sb, "al3", ilist, StringBuilder::append);
+        assertEquals(293, sb.length());
+
+        ilist.add(2);
+        _addList(sb, "al4", ilist, StringBuilder::append);
+        assertEquals(305, sb.length());
+
+        List<String> slist = new ArrayList<>();
+        addStrings(sb, "n/a", slist);
+        assertEquals(305, sb.length());
+
+        slist.add("s");
+        addStrings(sb, "slist", slist);
+        assertEquals(319, sb.length());
+
+        List<Duration> durs = new ArrayList<>();
+        addDurations(sb, "dur1", durs);
+        assertEquals(319, sb.length());
+
+        durs.add(Duration.ofMillis(1));
+        addDurations(sb, "dur2", durs);
+        assertEquals(336, sb.length());
+
+        addJsons(sb, "n/a", null);
+        assertEquals(336, sb.length());
+
+        List<JsonValue> jlist = new ArrayList<>();
+        addJsons(sb, "n/a", jlist);
+        assertEquals(336, sb.length());
+
+        JsonValue jv = new JsonValue("jv");
+        jlist.add(jv);
+        addJsons(sb, "jsons", jlist);
+        assertEquals(351, sb.length());
+        System.out.println(sb);
+        System.out.println(sb.length());
     }
 
     @Test
@@ -174,12 +284,15 @@ public final class JsonUtilsTests {
         assertEquals(-999, safeParseLong("18446744073709551616", -999));
         assertEquals(-999, safeParseLong(null, -999));
         assertEquals(-999, safeParseLong("notanumber", -999));
+        assertEquals(1, safeParseLong("1"));
     }
 
     @Test
     public void testMiscCoverage() {
         String json = ResourceUtils.resourceAsString("StreamInfo.json");
         printFormatted(JsonParser.parseUnchecked(json));
+
+        assertEquals("\"JsonUtilsTests\":", toKey(this.getClass()));
     }
 
     @Test

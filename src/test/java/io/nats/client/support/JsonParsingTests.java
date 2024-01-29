@@ -674,6 +674,12 @@ public final class JsonParsingTests {
         assertEquals(JsonValue.Type.BIG_DECIMAL, parse("00.001").type);
         assertEquals(JsonValue.Type.BIG_INTEGER, parse("12345678901234567890").type);
 
+        assertTrue(JsonParser.isDecimalNotation("-0"));
+        assertTrue(JsonParser.isDecimalNotation("1.1"));
+        assertTrue(JsonParser.isDecimalNotation("-24e7345"));
+        assertTrue(JsonParser.isDecimalNotation("-24E7345"));
+        assertFalse(JsonParser.isDecimalNotation("12345"));
+
         String str = new BigInteger( Long.toString(Long.MAX_VALUE) ).add( BigInteger.ONE ).toString();
         assertEquals(JsonValue.Type.BIG_INTEGER, parse(str).type);
 
