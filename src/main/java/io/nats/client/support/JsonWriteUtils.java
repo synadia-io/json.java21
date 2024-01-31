@@ -18,23 +18,19 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static io.nats.client.support.DateTimeUtils.DEFAULT_TIME;
 import static io.nats.client.support.Encoding.jsonEncode;
 import static io.nats.client.support.JsonValueUtils.instance;
 
-/**
- * Internal json parsing helpers.
- */
-public abstract class JsonUtils {
-    private static final String Q = "\"";
-    private static final String QCOLONQ = "\":\"";
-    private static final String QCOLON = "\":";
-    private static final String QCOMMA = "\",";
-    private static final String COMMA = ",";
+public abstract class JsonWriteUtils {
+    public static final String Q = "\"";
+    public static final String QCOLONQ = "\":\"";
+    public static final String QCOLON = "\":";
+    public static final String QCOMMA = "\",";
+    public static final String COMMA = ",";
 
-    private JsonUtils() {} /* ensures cannot be constructed */
+    private JsonWriteUtils() {} /* ensures cannot be constructed */
 
     // ----------------------------------------------------------------------------------------------------
     // BUILD A STRING OF JSON
@@ -471,20 +467,5 @@ public abstract class JsonUtils {
     public static long safeParseLong(String s, long dflt) {
         Long l = safeParseLong(s);
         return l == null ? dflt : l;
-    }
-
-    public static boolean mapEquals(Map<String, String> map1, Map<String, String> map2) {
-        if (map1 == null) {
-            return map2 == null;
-        }
-        if (map2 == null || map1.size() != map2.size()) {
-            return false;
-        }
-        for (String key : map1.keySet()) {
-            if (!Objects.equals(map1.get(key), map2.get(key))) {
-                return false;
-            }
-        }
-        return true;
     }
 }
