@@ -53,7 +53,7 @@ public abstract class JsonValueUtils {
 
     public static Map<String, String> readStringStringMap(JsonValue jv, String key) {
         JsonValue o = readObject(jv, key);
-        if (o.type == Type.MAP && o.map.size() > 0) {
+        if (o.type == Type.MAP && !o.map.isEmpty()) {
             Map<String, String> temp = new HashMap<>();
             for (String k : o.map.keySet()) {
                 String value = readString(o, k);
@@ -171,6 +171,7 @@ public abstract class JsonValueUtils {
     public static List<Long> readLongList(JsonValue jsonValue, String key) {
         return read(jsonValue, key, v -> listOf(v, JsonValueUtils::getLong));
     }
+
     public static List<Duration> readNanosList(JsonValue jsonValue, String key) {
         return readNanosList(jsonValue, key, false);
     }

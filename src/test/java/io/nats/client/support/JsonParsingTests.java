@@ -81,6 +81,8 @@ public final class JsonParsingTests {
 
         for (int i = 0; i < list.size(); i++) {
             JsonValue v = list.get(i);
+            assertEquals(v, v.toJsonValue());
+            assertEquals(v.toString("JsonParsingTests"), v.toString(this.getClass()));
             assertEquals(decodeds.get(i), v.string);
             assertEquals(v.toJson(), "\"" + encodeds.get(i) + "\"");
         }
@@ -106,6 +108,7 @@ public final class JsonParsingTests {
         oMap.put("falseKey1", new JsonValue(false));
         oMap.put("falseKey2", new JsonValue(Boolean.FALSE));
         oMap.put("stringKey", new JsonValue("hello world!"));
+        oMap.put("charKey", new JsonValue('x'));
         oMap.put("escapeStringKey", new JsonValue("h\be\tllo w\u1234orld!"));
         oMap.put("nullKey", JsonValue.NULL);
         oMap.put("intKey1", new JsonValue(Integer.MAX_VALUE));
@@ -124,6 +127,10 @@ public final class JsonParsingTests {
         // some coverage here
         JsonValue vMap = new JsonValue(oMap);
         assertEquals(vMap.toJson(), vMap.toString());
+        String s = JsonValueUtils.readString(vMap, "stringKey");
+        byte[] ba = JsonValueUtils.readBytes(vMap, "stringKey");
+        assertNotNull(ba);
+        assertEquals(s, new String(ba));
 
         validateMapTypes(oMap, oMap, true);
 
@@ -146,6 +153,7 @@ public final class JsonParsingTests {
         assertEquals(JsonValue.Type.BOOL, map.get("falseKey1").type);
         assertEquals(JsonValue.Type.BOOL, map.get("falseKey2").type);
         assertEquals(JsonValue.Type.STRING, map.get("stringKey").type);
+        assertEquals(JsonValue.Type.STRING, map.get("charKey").type);
         assertEquals(JsonValue.Type.STRING, map.get("escapeStringKey").type);
         assertEquals(JsonValue.Type.INTEGER, map.get("intKey1").type);
         assertEquals(JsonValue.Type.INTEGER, map.get("intKey2").type);
@@ -227,7 +235,6 @@ public final class JsonParsingTests {
             assertEquals(v.object, p.object);
             assertTrue(list.contains(v));
         }
-
 
         list.clear();
         list.add(new JsonValue(1));

@@ -18,7 +18,7 @@ import java.math.BigInteger;
 import java.util.*;
 
 import static io.nats.client.support.Encoding.jsonEncode;
-import static io.nats.client.support.JsonUtils.*;
+import static io.nats.client.support.JsonWriteUtils.*;
 
 public class JsonValue implements JsonSerializable {
 
