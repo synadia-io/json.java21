@@ -11,17 +11,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package io.nats.client.support;
+package io.nats.json;
+
+import static io.nats.json.JsonValue.EMPTY_ARRAY;
+import static io.nats.json.JsonValue.EMPTY_MAP;
+import static io.nats.json.JsonValue.Type;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
-
-import static io.nats.client.support.JsonValue.*;
 
 /**
  * Internal json value helpers.
