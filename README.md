@@ -4,9 +4,9 @@
 
 This library is a JSON Parser built specifically for JNATS to avoid a 3rd party library dependency.
 
-It has been extracted from the Java library since it is also used by the [jwt.java](https://github.com/nats-io/jwt.java) library.
+It has been extracted and repackaged from the JNATS library since it is also used by the [jwt.java](https://github.com/nats-io/jwt.java) library.
 
-**Current Release**: 1.5.2 &nbsp; **Current Snapshot**: 1.5.3-SNAPSHOT
+**Current Release**: 2.0.0 &nbsp; **Current Snapshot**: 2.0.1-SNAPSHOT
 
 [![License Apache 2](https://img.shields.io/badge/License-Apache2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.nats/jnats-json/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.nats/jnats-json)
