@@ -11,14 +11,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package io.nats.client.support;
+package io.nats.json;
+
+import static io.nats.json.Encoding.jsonEncode;
+import static io.nats.json.JsonWriteUtils.addField;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.*;
-
-import static io.nats.client.support.Encoding.jsonEncode;
-import static io.nats.client.support.JsonWriteUtils.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class JsonValue implements JsonSerializable {
 
@@ -226,16 +232,16 @@ public class JsonValue implements JsonSerializable {
                 addField(sbo, key, map.get(key));
             }
         }
-        return endJson(sbo).toString();
+        return JsonWriteUtils.endJson(sbo).toString();
     }
 
     private String valueString(List<JsonValue> list) {
-        StringBuilder sba = beginArray();
+        StringBuilder sba = JsonWriteUtils.beginArray();
         for (JsonValue v : list) {
             sba.append(v.toJson());
             sba.append(COMMA);
         }
-        return endArray(sba).toString();
+        return JsonWriteUtils.endArray(sba).toString();
     }
 
     @Override

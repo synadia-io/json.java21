@@ -11,17 +11,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package io.nats.client.support;
+package io.nats.json;
+
+import static io.nats.json.DateTimeUtils.DEFAULT_TIME;
+import static io.nats.json.Encoding.jsonEncode;
+import static io.nats.json.JsonValueUtils.instance;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import static io.nats.client.support.DateTimeUtils.DEFAULT_TIME;
-import static io.nats.client.support.Encoding.jsonEncode;
-import static io.nats.client.support.JsonValueUtils.instance;
 
 public abstract class JsonWriteUtils {
     public static final String Q = "\"";

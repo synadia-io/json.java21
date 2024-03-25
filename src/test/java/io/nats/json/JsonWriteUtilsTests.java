@@ -11,18 +11,45 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package io.nats.client.support;
+package io.nats.json;
 
-import io.ResourceUtils;
-import org.junit.jupiter.api.Test;
+import static io.nats.json.DateTimeUtils.DEFAULT_TIME;
+import static io.nats.json.JsonWriteUtils._addList;
+import static io.nats.json.JsonWriteUtils.addDurations;
+import static io.nats.json.JsonWriteUtils.addEnumWhenNot;
+import static io.nats.json.JsonWriteUtils.addField;
+import static io.nats.json.JsonWriteUtils.addFieldAsNanos;
+import static io.nats.json.JsonWriteUtils.addFieldEvenEmpty;
+import static io.nats.json.JsonWriteUtils.addFieldWhenGreaterThan;
+import static io.nats.json.JsonWriteUtils.addFieldWhenGtZero;
+import static io.nats.json.JsonWriteUtils.addFieldWhenGteMinusOne;
+import static io.nats.json.JsonWriteUtils.addFldWhenTrue;
+import static io.nats.json.JsonWriteUtils.addJsons;
+import static io.nats.json.JsonWriteUtils.addRawJson;
+import static io.nats.json.JsonWriteUtils.addStrings;
+import static io.nats.json.JsonWriteUtils.beginFormattedJson;
+import static io.nats.json.JsonWriteUtils.beginJson;
+import static io.nats.json.JsonWriteUtils.beginJsonPrefixed;
+import static io.nats.json.JsonWriteUtils.endFormattedJson;
+import static io.nats.json.JsonWriteUtils.endJson;
+import static io.nats.json.JsonWriteUtils.printFormatted;
+import static io.nats.json.JsonWriteUtils.safeParseLong;
+import static io.nats.json.JsonWriteUtils.toKey;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
-import static io.nats.client.support.DateTimeUtils.DEFAULT_TIME;
-import static io.nats.client.support.JsonWriteUtils.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import io.ResourceUtils;
 
 public final class JsonWriteUtilsTests {
 
