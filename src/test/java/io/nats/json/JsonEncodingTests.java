@@ -11,16 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package io.nats.client.support;
+package io.nats.json;
 
-import io.ResourceUtils;
-import org.junit.jupiter.api.Test;
+import static io.nats.json.Encoding.base64UrlDecode;
+import static io.nats.json.Encoding.fromBase64Url;
+import static io.nats.json.Encoding.jsonDecode;
+import static io.nats.json.Encoding.jsonEncode;
+import static io.nats.json.Encoding.toBase64Url;
+import static io.nats.json.Encoding.uriDecode;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import static io.nats.client.support.Encoding.*;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+import io.ResourceUtils;
 
 public final class JsonEncodingTests {
     @Test

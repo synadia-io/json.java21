@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package io.nats.client.support;
+package io.nats.json;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static io.nats.client.support.JsonValue.NULL;
 
 public class JsonParser {
 
@@ -160,7 +158,7 @@ public class JsonParser {
     public JsonValue parse() throws JsonParseException {
         char c = peekToken();
         if (c == 0) {
-            return NULL;
+            return JsonValue.NULL;
         }
         return nextValue();
     }
@@ -253,7 +251,7 @@ public class JsonParser {
             }
 
             JsonValue value = nextValue();
-            if (value != NULL || keepNulls) {
+            if (value != JsonValue.NULL || keepNulls) {
                 map.put(key, value);
             }
 

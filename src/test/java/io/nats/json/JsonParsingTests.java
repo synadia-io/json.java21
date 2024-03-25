@@ -11,25 +11,57 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package io.nats.client.support;
+package io.nats.json;
 
-import io.ResourceUtils;
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
-import org.junit.jupiter.api.Test;
+import static io.nats.json.Encoding.jsonEncode;
+import static io.nats.json.JsonParser.Option;
+import static io.nats.json.JsonParser.Option.KEEP_NULLS;
+import static io.nats.json.JsonParser.parse;
+import static io.nats.json.JsonParser.parseUnchecked;
+import static io.nats.json.JsonValueUtils.ArrayBuilder;
+import static io.nats.json.JsonValueUtils.MapBuilder;
+import static io.nats.json.JsonValueUtils.arrayBuilder;
+import static io.nats.json.JsonValueUtils.getInteger;
+import static io.nats.json.JsonValueUtils.getLong;
+import static io.nats.json.JsonValueUtils.instance;
+import static io.nats.json.JsonValueUtils.mapBuilder;
+import static io.nats.json.JsonValueUtils.read;
+import static io.nats.json.JsonValueUtils.readBoolean;
+import static io.nats.json.JsonValueUtils.readDate;
+import static io.nats.json.JsonValueUtils.readInteger;
+import static io.nats.json.JsonValueUtils.readLong;
+import static io.nats.json.JsonValueUtils.readNanos;
+import static io.nats.json.JsonValueUtils.readNanosList;
+import static io.nats.json.JsonValueUtils.readObject;
+import static io.nats.json.JsonValueUtils.readOptionalStringList;
+import static io.nats.json.JsonValueUtils.readString;
+import static io.nats.json.JsonValueUtils.readStringList;
+import static io.nats.json.JsonValueUtils.readStringListIgnoreEmpty;
+import static io.nats.json.JsonValueUtils.readStringStringMap;
+import static io.nats.json.JsonValueUtils.readValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.DateTimeException;
 import java.time.Duration;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
-import static io.nats.client.support.Encoding.jsonEncode;
-import static io.nats.client.support.JsonParser.*;
-import static io.nats.client.support.JsonParser.Option.KEEP_NULLS;
-import static io.nats.client.support.JsonValueUtils.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import io.ResourceUtils;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 public final class JsonParsingTests {
 

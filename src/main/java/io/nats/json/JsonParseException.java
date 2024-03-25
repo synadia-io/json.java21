@@ -1,4 +1,4 @@
-package io.nats.client.support;
+package io.nats.json;
 
 import java.io.IOException;
 
