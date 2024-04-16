@@ -133,10 +133,12 @@ public final class EncodingTests {
         byte[] burl = surl.getBytes();
 
         byte[] uencBytes = base64UrlEncode(btxt);
+        assertEquals("YmxhaGJsYWg", base64UrlEncodeToString(text));
         assertEquals("YmxhaGJsYWg", new String(uencBytes));
         assertArrayEquals(btxt, base64UrlDecode(uencBytes));
 
         uencBytes = base64UrlEncode(burl);
+        assertEquals("aHR0cHM6Ly9uYXRzLmlvLw", base64UrlEncodeToString(surl));
         assertEquals("aHR0cHM6Ly9uYXRzLmlvLw", new String(uencBytes));
         assertArrayEquals(burl, base64UrlDecode(uencBytes));
 
