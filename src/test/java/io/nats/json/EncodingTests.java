@@ -17,14 +17,11 @@ import static io.nats.json.Encoding.base64BasicDecode;
 import static io.nats.json.Encoding.base64BasicDecodeToString;
 import static io.nats.json.Encoding.base64BasicEncode;
 import static io.nats.json.Encoding.base64BasicEncodeToString;
-import static io.nats.json.Encoding.base64Encode;
 import static io.nats.json.Encoding.base64UrlDecode;
 import static io.nats.json.Encoding.base64UrlEncode;
 import static io.nats.json.Encoding.base64UrlEncodeToString;
-import static io.nats.json.Encoding.fromBase64Url;
 import static io.nats.json.Encoding.jsonDecode;
 import static io.nats.json.Encoding.jsonEncode;
-import static io.nats.json.Encoding.toBase64Url;
 import static io.nats.json.Encoding.uriDecode;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -128,7 +125,6 @@ public final class EncodingTests {
         assertArrayEquals(bytes, base64BasicDecode(enc));
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     public void testBase64UrlEncoding() {
         String text = "blahblah";
@@ -136,56 +132,51 @@ public final class EncodingTests {
         String surl = "https://nats.io/";
         byte[] burl = surl.getBytes();
 
-        byte[] encBytes = base64Encode(btxt); //deprecated for base64UrlEncode
         byte[] uencBytes = base64UrlEncode(btxt);
-        assertEquals("YmxhaGJsYWg", new String(encBytes));
         assertEquals("YmxhaGJsYWg", new String(uencBytes));
-        assertEquals("YmxhaGJsYWg", toBase64Url(text));   //deprecated
-        assertEquals("YmxhaGJsYWg", toBase64Url(btxt));   //deprecated
-        assertEquals(text, fromBase64Url("YmxhaGJsYWg")); //deprecated
-        assertArrayEquals(btxt, base64UrlDecode(encBytes));
         assertArrayEquals(btxt, base64UrlDecode(uencBytes));
 
-        //noinspection deprecation
-        encBytes = base64Encode(burl);
         uencBytes = base64UrlEncode(burl);
-        assertEquals("aHR0cHM6Ly9uYXRzLmlvLw", new String(encBytes));
         assertEquals("aHR0cHM6Ly9uYXRzLmlvLw", new String(uencBytes));
-        assertEquals("aHR0cHM6Ly9uYXRzLmlvLw", toBase64Url(surl)); //deprecated
-        assertEquals("aHR0cHM6Ly9uYXRzLmlvLw", toBase64Url(burl)); //deprecated
-        assertEquals(surl, fromBase64Url("aHR0cHM6Ly9uYXRzLmlvLw")); //deprecated
-        assertArrayEquals(burl, base64UrlDecode(encBytes));
         assertArrayEquals(burl, base64UrlDecode(uencBytes));
 
         assertEquals("+ hello world", uriDecode("+%20hello%20world"));
 
-        String data = ResourceUtils.resourceAsString("test_bytes_000100.txt");
+        String str = ResourceUtils.resourceAsString("test_bytes_000100.txt");
         String check = ResourceUtils.resourceAsString("url_encoded_000100.txt");
-        byte[] bytes = data.getBytes(StandardCharsets.UTF_8);
-        String enc = base64UrlEncodeToString(bytes);
-        assertEquals(check, enc);
-        assertArrayEquals(bytes, base64UrlDecode(enc));
+        byte[] bytes = str.getBytes(StandardCharsets.UTF_8);
+        String senc = base64UrlEncodeToString(str);
+        assertEquals(check, senc);
+        String benc = base64UrlEncodeToString(bytes);
+        assertEquals(check, benc);
+        assertArrayEquals(bytes, base64UrlDecode(benc));
 
-        data = ResourceUtils.resourceAsString("test_bytes_001000.txt");
+        str = ResourceUtils.resourceAsString("test_bytes_001000.txt");
         check = ResourceUtils.resourceAsString("url_encoded_001000.txt");
-        bytes = data.getBytes(StandardCharsets.UTF_8);
-        enc = base64UrlEncodeToString(bytes);
-        assertEquals(check, enc);
-        assertArrayEquals(bytes, base64UrlDecode(enc));
+        bytes = str.getBytes(StandardCharsets.UTF_8);
+        senc = base64UrlEncodeToString(str);
+        assertEquals(check, senc);
+        benc = base64UrlEncodeToString(bytes);
+        assertEquals(check, benc);
+        assertArrayEquals(bytes, base64UrlDecode(benc));
 
-        data = ResourceUtils.resourceAsString("test_bytes_010000.txt");
+        str = ResourceUtils.resourceAsString("test_bytes_010000.txt");
         check = ResourceUtils.resourceAsString("url_encoded_010000.txt");
-        bytes = data.getBytes(StandardCharsets.UTF_8);
-        enc = base64UrlEncodeToString(bytes);
-        assertEquals(check, enc);
-        assertArrayEquals(bytes, base64UrlDecode(enc));
+        bytes = str.getBytes(StandardCharsets.UTF_8);
+        senc = base64UrlEncodeToString(str);
+        assertEquals(check, senc);
+        benc = base64UrlEncodeToString(bytes);
+        assertEquals(check, benc);
+        assertArrayEquals(bytes, base64UrlDecode(benc));
 
-        data = ResourceUtils.resourceAsString("test_bytes_100000.txt");
+        str = ResourceUtils.resourceAsString("test_bytes_100000.txt");
         check = ResourceUtils.resourceAsString("url_encoded_100000.txt");
-        bytes = data.getBytes(StandardCharsets.UTF_8);
-        enc = base64UrlEncodeToString(bytes);
-        assertEquals(check, enc);
-        assertArrayEquals(bytes, base64UrlDecode(enc));
+        bytes = str.getBytes(StandardCharsets.UTF_8);
+        senc = base64UrlEncodeToString(str);
+        assertEquals(check, senc);
+        benc = base64UrlEncodeToString(bytes);
+        assertEquals(check, benc);
+        assertArrayEquals(bytes, base64UrlDecode(benc));
 
     }
 }
