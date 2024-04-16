@@ -179,6 +179,5 @@ public final class EncodingTests {
         benc = base64UrlEncodeToString(bytes);
         assertEquals(check, benc);
         assertArrayEquals(bytes, base64UrlDecode(benc));
-
     }
 }
