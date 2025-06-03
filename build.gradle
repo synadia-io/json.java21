@@ -1,13 +1,14 @@
 import org.gradle.internal.os.OperatingSystem
 
 plugins {
+    id 'java'
     id 'java-library'
     id "maven-publish"
-    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
-    id 'signing'
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.12.2'
     id "org.gradle.test-retry" version "1.1.9"
+    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
+    id 'signing'
 }
 
 def jarVersion = "2.21.0.TEST.1"
@@ -24,8 +25,6 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
-    withJavadocJar()
-    withSourcesJar()
 }
 
 repositories {
@@ -69,6 +68,16 @@ javadoc {
             }
         }
     }
+}
+
+task javadocJar(type: Jar) {
+    archiveClassifier.set('javadoc')
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allSource
 }
 
 jacoco {
