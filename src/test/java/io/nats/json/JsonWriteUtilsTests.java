@@ -122,11 +122,12 @@ public final class JsonWriteUtilsTests {
         addField(sb, "n/a", (Long) null);
         assertEquals(0, sb.length());
 
-        //noinspection UnnecessaryBoxing
-        addField(sb, "iminusone", new Integer(-1));
+        //noinspection WrapperTypeMayBePrimitive
+        Integer i = -1;
+        addField(sb, "iminusone", i);
         assertEquals(0, sb.length());
 
-        addField(sb, "lminusone", new Long(-1));
+        addField(sb, "lminusone", -1L);
         assertEquals(0, sb.length());
 
         addStrings(sb, "foo", new String[]{"bbb"});
@@ -153,15 +154,14 @@ public final class JsonWriteUtilsTests {
         addFieldWhenGtZero(sb, "longnull", (Long) null);
         assertEquals(87, sb.length());
 
-        //noinspection UnnecessaryBoxing
-        addFieldWhenGtZero(sb, "intnotgt0", new Integer(0));
+        i = 0;
+        addFieldWhenGtZero(sb, "intnotgt0", i);
         assertEquals(87, sb.length());
 
         addFieldWhenGtZero(sb, "longnotgt0", 0L);
         assertEquals(87, sb.length());
 
-        //noinspection UnnecessaryBoxing
-        addFieldWhenGtZero(sb, "intgt0", new Integer(1));
+        addFieldWhenGtZero(sb, "intgt0", 1L);
         assertEquals(98, sb.length());
 
         addFieldWhenGtZero(sb, "longgt0", 1L);

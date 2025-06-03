@@ -13,11 +13,13 @@
 
 package io.nats.json;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+/**
+ * Utilities for encoding, i.e., Base64, URI and JSON
+ */
 public abstract class Encoding {
     private Encoding() {}  /* ensures cannot be constructed */
 
@@ -132,6 +134,11 @@ public abstract class Encoding {
         return new String(Base64.getUrlDecoder().decode(input));
     }
 
+    /**
+     * Decode a JSON string
+     * @param s the input string
+     * @return the decoded string
+     */
     public static String jsonDecode(String s) {
         int len = s.length();
         StringBuilder sb = new StringBuilder(len);
@@ -179,10 +186,21 @@ public abstract class Encoding {
         return sb.toString();
     }
 
+    /**
+     * Encode a JSON string
+     * @param s the input string
+     * @return the encoded string
+     */
     public static String jsonEncode(String s) {
         return jsonEncode(new StringBuilder(), s).toString();
     }
 
+    /**
+     * Encode a JSON string into a StringBuilder
+     * @param sb the target StringBuilder
+     * @param s the input string
+     * @return the encoded string as StringBuilder
+     */
     public static StringBuilder jsonEncode(StringBuilder sb, String s) {
         int len = s.length();
         for (int x = 0; x < len; x++) {
@@ -225,11 +243,12 @@ public abstract class Encoding {
         return sb;
     }
 
+    /**
+     * Decode a URI
+     * @param source the input
+     * @return the decoded URI
+     */
     public static String uriDecode(String source) {
-        try {
-            return URLDecoder.decode(source.replace("+", "%2B"), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            return source;
-        }
+        return URLDecoder.decode(source.replace("+", "%2B"), StandardCharsets.UTF_8);
     }
 }
