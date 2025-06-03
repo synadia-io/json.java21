@@ -11,7 +11,7 @@ plugins {
     id 'signing'
 }
 
-def jarVersion = "2.21.0.TEST.3"
+def jarVersion = "2.21.0"
 group = 'io.nats'
 
 def isMerge = System.getenv("BUILD_EVENT") == "push"
@@ -33,6 +33,8 @@ repositories {
 }
 
 dependencies {
+    implementation 'commons-codec:commons-codec:1.18.0'
+
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
     testImplementation 'nl.jqno.equalsverifier:equalsverifier:4.0'
 }

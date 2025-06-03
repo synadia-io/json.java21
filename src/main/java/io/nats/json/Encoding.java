@@ -15,12 +15,14 @@ package io.nats.json;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * Utilities for encoding, i.e., Base64, URI and JSON
  */
 public abstract class Encoding {
+
     private Encoding() {}  /* ensures cannot be constructed */
 
     /**
@@ -29,7 +31,7 @@ public abstract class Encoding {
      * @return the encoded byte array
      */
     public static byte[] base64BasicEncode(byte[] input) {
-        return Base64.getEncoder().encode(input);
+        return Base64.encodeBase64(input);
     }
 
     /**
@@ -38,7 +40,7 @@ public abstract class Encoding {
      * @return the encoded byte array
      */
     public static String base64BasicEncodeToString(byte[] input) {
-        return Base64.getEncoder().encodeToString(input);
+        return Base64.encodeBase64String(input);
     }
 
     /**
@@ -47,8 +49,7 @@ public abstract class Encoding {
      * @return the encoded byte array
      */
     public static String base64BasicEncodeToString(String input) {
-        return Base64.getEncoder()
-            .encodeToString(input.getBytes(StandardCharsets.UTF_8));
+        return Base64.encodeBase64String(input.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
@@ -57,7 +58,7 @@ public abstract class Encoding {
      * @return the encoded byte array
      */
     public static byte[] base64UrlEncode(byte[] input) {
-        return Base64.getUrlEncoder().withoutPadding().encode(input);
+        return Base64.encodeBase64URLSafe(input);
     }
 
     /**
@@ -66,7 +67,7 @@ public abstract class Encoding {
      * @return the encoded byte array
      */
     public static String base64UrlEncodeToString(byte[] input) {
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(input);
+        return Base64.encodeBase64URLSafeString(input);
     }
 
     /**
@@ -75,9 +76,7 @@ public abstract class Encoding {
      * @return the encoded byte array
      */
     public static String base64UrlEncodeToString(String input) {
-        return Base64.getUrlEncoder()
-            .withoutPadding()
-            .encodeToString(input.getBytes(StandardCharsets.UTF_8));
+        return Base64.encodeBase64URLSafeString(input.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
@@ -86,7 +85,7 @@ public abstract class Encoding {
      * @return the decoded byte array
      */
     public static byte[] base64BasicDecode(byte[] input) {
-        return Base64.getDecoder().decode(input);
+        return Base64.decodeBase64(input);
     }
 
     /**
@@ -95,7 +94,7 @@ public abstract class Encoding {
      * @return the decoded byte array
      */
     public static byte[] base64BasicDecode(String input) {
-        return Base64.getDecoder().decode(input);
+        return Base64.decodeBase64(input);
     }
 
     /**
@@ -104,7 +103,7 @@ public abstract class Encoding {
      * @return the decoded string
      */
     public static String base64BasicDecodeToString(String input) {
-        return new String(Base64.getDecoder().decode(input));
+        return new String(Base64.decodeBase64(input));
     }
 
     /**
@@ -113,7 +112,7 @@ public abstract class Encoding {
      * @return the decoded byte array
      */
     public static byte[] base64UrlDecode(byte[] input) {
-        return Base64.getUrlDecoder().decode(input);
+        return Base64.decodeBase64(input);
     }
 
     /**
@@ -122,7 +121,7 @@ public abstract class Encoding {
      * @return the decoded byte array
      */
     public static byte[] base64UrlDecode(String input) {
-        return Base64.getUrlDecoder().decode(input);
+        return Base64.decodeBase64(input);
     }
 
     /**
@@ -131,7 +130,7 @@ public abstract class Encoding {
      * @return the decoded string
      */
     public static String base64UrlDecodeToString(String input) {
-        return new String(Base64.getUrlDecoder().decode(input));
+        return new String(Base64.decodeBase64(input));
     }
 
     /**
