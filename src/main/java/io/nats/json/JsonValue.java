@@ -42,7 +42,11 @@ public class JsonValue implements JsonSerializable {
     public static final JsonValue EMPTY_MAP = new JsonValue(Collections.unmodifiableMap(new HashMap<>()));
     public static final JsonValue EMPTY_ARRAY = new JsonValue(Collections.unmodifiableList(new ArrayList<>()));
 
+    /**
+     * The underlying string
+     */
     public final String string;
+
     public final Boolean bool;
     public final Integer i;
     public final Long l;

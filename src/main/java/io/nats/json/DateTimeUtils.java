@@ -21,29 +21,60 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 /**
- * Internal json parsing helpers.
+ * Helper utilities for ZoneDateTime
  */
 public abstract class DateTimeUtils {
     private DateTimeUtils() {}  /* ensures cannot be constructed */
 
+    /**
+     * The ZoneId for GMT
+     */
     public static final ZoneId ZONE_ID_GMT = ZoneId.of("GMT");
+
+    /**
+     * The ZoneDateTime uses as a default, can be used instead of null
+     */
     public static final ZonedDateTime DEFAULT_TIME = ZonedDateTime.of(1, 1, 1, 0, 0, 0, 0, ZONE_ID_GMT);
+
+    /**
+     * The formatter to crate RFC 3339 strings from dates.
+     */
     public static final DateTimeFormatter RFC3339_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn'Z'");
 
+    /**
+     * Convert a ZoneDateTime to a GMT version of the ZoneDateTime
+     * @param zonedDateTime the input
+     * @return the output
+     */
     public static ZonedDateTime toGmt(ZonedDateTime zonedDateTime) {
         return zonedDateTime.withZoneSameInstant(ZONE_ID_GMT);
     }
 
+    /**
+     * Get an instance of ZonedDateTime.now(), but for the GMT timezone
+     * @return the current date-time using the system clock in GMT
+     */
     public static ZonedDateTime gmtNow() {
         return ZonedDateTime.now().withZoneSameInstant(ZONE_ID_GMT);
     }
 
+    /**
+     * Compare two ZonedDateTime after converting them to the GMT timezone
+     * @param zdt1 the first ZonedDateTime
+     * @param zdt2 the second ZonedDateTime
+     * @return true if they are equal
+     */
     public static boolean equals(ZonedDateTime zdt1, ZonedDateTime zdt2) {
         if (zdt1 == zdt2) return true;
         if (zdt1 == null || zdt2 == null) return false;
         return zdt1.withZoneSameInstant(ZONE_ID_GMT).equals(zdt2.withZoneSameInstant(ZONE_ID_GMT));
     }
 
+    /**
+     * Format the ZonedDateTime to RFC 3339, most commonly used for input to the serer
+     * @param zonedDateTime the input
+     * @return the formatted string
+     */
     public static String toRfc3339(ZonedDateTime zonedDateTime) {
         return RFC3339_FORMATTER.format(toGmt(zonedDateTime));
     }
@@ -57,6 +88,12 @@ public abstract class DateTimeUtils {
         return parseDateTime(dateTime, DEFAULT_TIME);
     }
 
+    /**
+     * Parses a date time from the server.
+     * @param dateTime - date time from the server.
+     * @param dflt - the default ZoneDateTime to use if the input string exceptions while parsing
+     * @return a ZonedDateTime.
+     */
     public static ZonedDateTime parseDateTime(String dateTime, ZonedDateTime dflt) {
         try {
             return toGmt(ZonedDateTime.parse(dateTime));
@@ -66,14 +103,29 @@ public abstract class DateTimeUtils {
         }
     }
 
+    /**
+     * Parses a date time from the server which throws if there is an error parsing.
+     * @param dateTime - date time from the server.
+     * @return a ZonedDateTime.
+     */
     public static ZonedDateTime parseDateTimeThrowParseError(String dateTime) {
         return toGmt(ZonedDateTime.parse(dateTime));
     }
 
+    /**
+     * Get a ZonedDateTime representing millis from now
+     * @param millis the millis from now value
+     * @return a ZonedDateTime.
+     */
     public static ZonedDateTime fromNow(long millis) {
         return ZonedDateTime.ofInstant(Instant.now().plusMillis(millis), ZONE_ID_GMT);
     }
 
+    /**
+     * Get a ZonedDateTime representing millis from now
+     * @param dur the duration to use the millis for from now
+     * @return a ZonedDateTime.
+     */
     public static ZonedDateTime fromNow(Duration dur) {
         return ZonedDateTime.ofInstant(Instant.now().plusMillis(dur.toMillis()), ZONE_ID_GMT);
     }
