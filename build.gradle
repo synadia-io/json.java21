@@ -1,6 +1,7 @@
 import org.gradle.internal.os.OperatingSystem
 
 plugins {
+    id 'java'
     id 'java-library'
     id 'maven-publish'
     id 'jacoco'
@@ -24,8 +25,6 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
-    withJavadocJar()
-    withSourcesJar()
 }
 
 repositories {
@@ -71,6 +70,31 @@ javadoc {
     }
 }
 
+tasks.register('javadocJar', Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+tasks.register('sourcesJar', Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+jacoco {
+    toolVersion = "0.8.13"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
 if (isMerge || isRelease) {
     nexusPublishing {
         repositories {
@@ -87,18 +111,14 @@ if (isMerge || isRelease) {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId = archivesBaseName
             from components.java
-            versionMapping {
-                usage('java-api') {
-                    fromResolutionOf('runtimeClasspath')
-                }
-                usage('java-runtime') {
-                    fromResolutionResult()
-                }
-            }
+            artifact sourcesJar
+            artifact javadocJar
             pom {
-                name = 'JNats Json'
+                name = rootProject.name
+                packaging = 'jar'
+                groupId = group
+                artifactId = archivesBaseName
                 description = 'JSON Parser built specifically for JNATS'
                 url = 'https://github.com/nats-io/nats.java.json'
                 licenses {
@@ -112,7 +132,7 @@ publishing {
                         id = "synadia"
                         name = "Synadia"
                         email = "info@synadia.com"
-                        url = "https://synadia.io"
+                        url = "https://nats.io"
                     }
                 }
                 scm {
@@ -121,14 +141,6 @@ publishing {
             }
         }
     }
-//    repositories {
-//        maven {
-//            // change URLs to point to your repos, e.g. http://my.org/repo
-//            def releasesRepoUrl = "https://ossrh-staging-api.central.sonatype.com/service/local/"
-//            def snapshotsRepoUrl = layout.buildDirectory.dir("https://central.sonatype.com/repository/maven-snapshots/")
-//            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-//        }
-//    }
 }
 
 if (isRelease) {
