@@ -7,12 +7,11 @@ plugins {
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.12.2'
     id "org.gradle.test-retry" version "1.1.9"
-    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
-//    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
+    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
     id 'signing'
 }
 
-def jarVersion = "2.21.0.TEST.2"
+def jarVersion = "2.21.0.TEST.3"
 group = 'io.nats'
 
 def isMerge = System.getenv("BUILD_EVENT") == "push"
@@ -70,12 +69,12 @@ javadoc {
     }
 }
 
-task javadocJar(type: Jar) {
+tasks.register('javadocJar', Jar) {
     archiveClassifier.set('javadoc')
     from javadoc
 }
 
-task sourcesJar(type: Jar) {
+tasks.register('sourcesJar', Jar) {
     archiveClassifier.set('sources')
     from sourceSets.main.allSource
 }
@@ -149,7 +148,6 @@ if (isRelease) {
         def signingKey = System.getenv('SIGNING_KEY')
         def signingPassword = System.getenv('SIGNING_PASSWORD')
         useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-        // sign configurations.archives
         sign publishing.publications.mavenJava
     }
 }
