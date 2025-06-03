@@ -29,4 +29,5 @@ jobs:
       - name: Verify Javadoc
         run: ./gradlew javadoc
       - name: Verify, Sign and Publish Release
-        run: ./gradlew -i signArchives signMavenJavaPublication publishToSonatype closeAndReleaseSonatypeStagingRepository
+#        run: ./gradlew -i signArchives signMavenJavaPublication publishToSonatype closeAndReleaseSonatypeStagingRepository
+        run: ./gradlew -i signMavenJavaPublication publishToSonatype closeAndReleaseSonatypeStagingRepository
