@@ -25,6 +25,8 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+    withJavadocJar()
+    withSourcesJar()
 }
 
 repositories {
@@ -70,24 +72,14 @@ javadoc {
     }
 }
 
-tasks.register('javadocJar', Jar) {
-    classifier = 'javadoc'
-    from javadoc
-}
-
-tasks.register('sourcesJar', Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
 jacoco {
     toolVersion = "0.8.13"
 }
 
 jacocoTestReport {
     reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
+        xml.required = true // coveralls plugin depends on xml format report
+        html.required = true
     }
 }
 
