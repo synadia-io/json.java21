@@ -1,4 +1,4 @@
-// Copyright 2023-2024 The NATS Authors
+// Copyright 2023-2025 The NATS Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -135,14 +135,7 @@ public class JsonParser {
     public JsonParser(char[] json, int startIndex, Option... options) {
         this.json = json;
 
-        boolean kn = false;
-        for (Option o : options) {
-            if (o == Option.KEEP_NULLS) {
-                kn = true;
-                break; // b/c only option currently
-            }
-        }
-        keepNulls = kn;
+        keepNulls = options != null && options.length > 0; // KEEP_NULLS is currently the only option
 
         len = json == null ? 0 : json.length;
         idx = startIndex;
@@ -311,7 +304,7 @@ public class JsonParser {
         return next;
     }
 
-    // next string assumes you have already seen the starting quote
+    // nextString() assumes you have already seen the starting quote
     private String nextString() throws JsonParseException {
         StringBuilder sb = new StringBuilder();
         while (true) {

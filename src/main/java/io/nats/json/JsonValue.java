@@ -1,4 +1,4 @@
-// Copyright 2023-2024 The NATS Authors
+// Copyright 2023-2025 The NATS Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -13,21 +13,19 @@
 
 package io.nats.json;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.Duration;
+import java.util.*;
+
 import static io.nats.json.Encoding.jsonEncode;
 import static io.nats.json.JsonWriteUtils.addField;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
 public class JsonValue implements JsonSerializable {
 
+    /**
+     * Possible types of the underlying value
+     */
     public enum Type {
         STRING, BOOL, INTEGER, LONG, DOUBLE, FLOAT, BIG_DECIMAL, BIG_INTEGER, MAP, ARRAY, NULL;
     }
@@ -36,11 +34,11 @@ public class JsonValue implements JsonSerializable {
     private static final char COMMA = ',';
     private static final String NULL_STR = "null";
 
-    public static final JsonValue NULL = new JsonValue();
+    public static final JsonValue NULL = new JsonValue(Type.NULL);
     public static final JsonValue TRUE = new JsonValue(true);
     public static final JsonValue FALSE = new JsonValue(false);
-    public static final JsonValue EMPTY_MAP = new JsonValue(Collections.unmodifiableMap(new HashMap<>()));
-    public static final JsonValue EMPTY_ARRAY = new JsonValue(Collections.unmodifiableList(new ArrayList<>()));
+    public static final JsonValue EMPTY_MAP = new JsonValue(Type.MAP);
+    public static final JsonValue EMPTY_ARRAY = new JsonValue(Type.ARRAY);
 
     /**
      * The underlying string
@@ -62,8 +60,40 @@ public class JsonValue implements JsonSerializable {
 
     public final List<String> mapOrder;
 
-    public JsonValue() {
-        this(null, null, null, null, null, null, null, null, null, null);
+    public static JsonValue instance(Object o) {
+        return switch (o) {
+            case null -> JsonValue.NULL;
+            case String string -> new JsonValue(string);
+            case JsonValue jsonValue -> jsonValue;
+            case JsonSerializable jsonSerializable -> jsonSerializable.toJsonValue();
+            case Boolean b -> new JsonValue(b);
+            case Integer i -> new JsonValue(i);
+            case Long l -> new JsonValue(l);
+            case Double d -> new JsonValue(d);
+            case Float v -> new JsonValue(v);
+            case BigDecimal bigDecimal -> new JsonValue(bigDecimal);
+            case BigInteger bigInteger -> new JsonValue(bigInteger);
+            case Collection<?> list -> _instance(list);
+            case Map<?, ?> map -> _instance(map);
+            case Duration dur -> new JsonValue(dur.toNanos());
+            default -> new JsonValue(o.toString());
+        };
+    }
+
+    private static JsonValue _instance(Collection<?> list) {
+        List<JsonValue> jv = new ArrayList<>();
+        for (Object o : list) {
+            jv.add(JsonValue.instance(o));
+        }
+        return new JsonValue(jv);
+    }
+
+    private static JsonValue _instance(Map<?, ?> map) {
+        Map<String, JsonValue> jv = new HashMap<>();
+        for(Map.Entry<?, ?> entry : map.entrySet()) {
+            jv.put(entry.getKey().toString(), JsonValue.instance(entry.getValue()));
+        }
+        return new JsonValue(jv);
     }
 
     public JsonValue(String string) {
@@ -106,7 +136,7 @@ public class JsonValue implements JsonSerializable {
         this(null, null, null, null, null, null, null, null, map, null);
     }
 
-    public JsonValue(List<JsonValue> list) {
+    public JsonValue(Collection<JsonValue> list) {
         this(null, null, null, null, null, null, null, null, null, list);
     }
 
@@ -114,10 +144,17 @@ public class JsonValue implements JsonSerializable {
         this(null, null, null, null, null, null, null, null, null, values == null ? null : Arrays.asList(values));
     }
 
-    private JsonValue(String string, Boolean bool, Integer i, Long l, Double d, Float f, BigDecimal bd, BigInteger bi, Map<String, JsonValue> map, List<JsonValue> array) {
+    private JsonValue(String string, Boolean bool, Integer i, Long l, Double d, Float f, BigDecimal bd, BigInteger bi,
+        Map<String, JsonValue> map, Collection<JsonValue> array)
+    {
         this.map = map;
         mapOrder = new ArrayList<>();
-        this.array = array;
+        if (array == null) {
+            this.array = null;
+        }
+        else {
+            this.array = new ArrayList<>(array);
+        }
         this.string = string;
         this.bool = bool;
         this.i = i;
@@ -181,6 +218,41 @@ public class JsonValue implements JsonSerializable {
         }
     }
 
+    /**
+     * Special internal constructor for empty and null
+     * @param type the type;
+     */
+    private JsonValue(Type type) {
+        this.type = type;
+
+        string = null;
+        bool = null;
+        i = null;
+        l = null;
+        d = null;
+        f = null;
+        bd = null;
+        bi = null;
+        number = null;
+        mapOrder = new ArrayList<>();
+
+        if (type == Type.MAP) {
+            map = Collections.unmodifiableMap(new HashMap<>());
+            array = null;
+            object = map;
+        }
+        else if (type == Type.ARRAY) {
+            map = null;
+            array = Collections.unmodifiableList(new ArrayList<>());
+            object = array;
+        }
+        else { // Type.NULL
+            map = null;
+            array = null;
+            object = null;
+        }
+    }
+
     public String toString(Class<?> c) {
         return toString(c.getSimpleName());
     }
@@ -201,19 +273,19 @@ public class JsonValue implements JsonSerializable {
 
     @Override
     public String toJson() {
-        switch (type) {
-            case STRING:      return valueString(string);
-            case BOOL:        return valueString(bool);
-            case MAP:         return valueString(map);
-            case ARRAY:       return valueString(array);
-            case INTEGER:     return i.toString();
-            case LONG:        return l.toString();
-            case DOUBLE:      return d.toString();
-            case FLOAT:       return f.toString();
-            case BIG_DECIMAL: return bd.toString();
-            case BIG_INTEGER: return bi.toString();
-            default:          return NULL_STR;
-        }
+        return switch (type) {
+            case STRING -> valueString(string);
+            case BOOL -> valueString(bool);
+            case MAP -> valueString(map);
+            case ARRAY -> valueString(array);
+            case INTEGER -> i.toString();
+            case LONG -> l.toString();
+            case DOUBLE -> d.toString();
+            case FLOAT -> f.toString();
+            case BIG_DECIMAL -> bd.toString();
+            case BIG_INTEGER -> bi.toString();
+            default -> NULL_STR;
+        };
     }
 
     private String valueString(String s) {

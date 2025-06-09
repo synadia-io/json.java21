@@ -1,4 +1,4 @@
-// Copyright 2015-2024 The NATS Authors
+// Copyright 2025 The NATS Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -13,43 +13,15 @@
 
 package io.nats.json;
 
-import static io.nats.json.DateTimeUtils.DEFAULT_TIME;
-import static io.nats.json.JsonWriteUtils._addList;
-import static io.nats.json.JsonWriteUtils.addDurations;
-import static io.nats.json.JsonWriteUtils.addEnumWhenNot;
-import static io.nats.json.JsonWriteUtils.addField;
-import static io.nats.json.JsonWriteUtils.addFieldAsNanos;
-import static io.nats.json.JsonWriteUtils.addFieldEvenEmpty;
-import static io.nats.json.JsonWriteUtils.addFieldWhenGreaterThan;
-import static io.nats.json.JsonWriteUtils.addFieldWhenGtZero;
-import static io.nats.json.JsonWriteUtils.addFieldWhenGteMinusOne;
-import static io.nats.json.JsonWriteUtils.addFldWhenTrue;
-import static io.nats.json.JsonWriteUtils.addJsons;
-import static io.nats.json.JsonWriteUtils.addRawJson;
-import static io.nats.json.JsonWriteUtils.addStrings;
-import static io.nats.json.JsonWriteUtils.beginFormattedJson;
-import static io.nats.json.JsonWriteUtils.beginJson;
-import static io.nats.json.JsonWriteUtils.beginJsonPrefixed;
-import static io.nats.json.JsonWriteUtils.endFormattedJson;
-import static io.nats.json.JsonWriteUtils.endJson;
-import static io.nats.json.JsonWriteUtils.printFormatted;
-import static io.nats.json.JsonWriteUtils.safeParseLong;
-import static io.nats.json.JsonWriteUtils.toKey;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
-import org.junit.jupiter.api.Test;
-
-import io.ResourceUtils;
+import static io.nats.json.DateTimeUtils.DEFAULT_TIME;
+import static io.nats.json.JsonWriteUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public final class JsonWriteUtilsTests {
 
@@ -161,7 +133,7 @@ public final class JsonWriteUtilsTests {
         addFieldWhenGtZero(sb, "longnotgt0", 0L);
         assertEquals(87, sb.length());
 
-        addFieldWhenGtZero(sb, "intgt0", 1L);
+        addFieldWhenGtZero(sb, "intgt0", 1);
         assertEquals(98, sb.length());
 
         addFieldWhenGtZero(sb, "longgt0", 1L);
@@ -290,8 +262,6 @@ public final class JsonWriteUtilsTests {
         jlist.add(jv);
         addJsons(sb, "jsons", jlist);
         assertEquals(351, sb.length());
-        System.out.println(sb);
-        System.out.println(sb.length());
     }
 
     @Test
@@ -309,14 +279,6 @@ public final class JsonWriteUtilsTests {
         assertEquals(-999, safeParseLong(null, -999));
         assertEquals(-999, safeParseLong("notanumber", -999));
         assertEquals(1, safeParseLong("1"));
-    }
-
-    @Test
-    public void testMiscCoverage() {
-        String json = ResourceUtils.resourceAsString("StreamInfo.json");
-        printFormatted(JsonParser.parseUnchecked(json));
-
-        assertEquals("\"JsonWriteUtilsTests\":", toKey(this.getClass()));
     }
 
     @Test
