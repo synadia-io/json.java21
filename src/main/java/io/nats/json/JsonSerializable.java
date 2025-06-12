@@ -13,6 +13,8 @@
 
 package io.nats.json;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -24,6 +26,7 @@ public interface JsonSerializable {
      * Get the String version of the JSON object
      * @return the string
      */
+    @NotNull
     String toJson();
 
     /**
@@ -31,7 +34,7 @@ public interface JsonSerializable {
      * The built-in default implementation uses the toJson() and converts it to a string.
      * @return the byte array
      */
-    default byte[] serialize() {
+    default byte @NotNull [] serialize() {
         return toJson().getBytes(StandardCharsets.UTF_8);
     }
 
@@ -41,6 +44,7 @@ public interface JsonSerializable {
      * It assumes that you have valid JSON
      * @return the JsonValue
      */
+    @NotNull
     default JsonValue toJsonValue() {
         return JsonParser.parseUnchecked(toJson());
     }

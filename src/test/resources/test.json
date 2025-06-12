@@ -6,7 +6,8 @@
   "bool": true,
   "date": "2021-01-25T20:09:10.6225191Z",
   "nanos": 1000000000,
-  "base_64": "AGFiY2RlZgECBAg=",
+  "base_64_basic": "AGFiY2RlZgECBAg==",
+  "base_64_url": "AGFiY2RlZgECBAg",
   "map": {},
   "array": [],
   "smap": {

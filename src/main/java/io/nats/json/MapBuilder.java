@@ -13,29 +13,62 @@
 
 package io.nats.json;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Utility class to build a JsonValue for a map
+ */
 public class MapBuilder implements JsonSerializable {
 
+    /**
+     * The JsonValue backing this MapBuilder
+     */
+    @NotNull
     public final JsonValue jv;
 
-    public static MapBuilder instance() {
-        return new MapBuilder();
-    }
-
+    /**
+     * Get a new instance of MapBuilder
+     */
     public MapBuilder() {
         jv = new JsonValue(new HashMap<>());
     }
 
-    public MapBuilder put(String s, Object o) {
+    /**
+     * Get an instance of MapBuilder
+     * @return a MapBuilder instance
+     */
+    @NotNull
+    public static MapBuilder instance() {
+        return new MapBuilder();
+    }
+
+    /**
+     * Put an object in the map. The value is converted to a JsonValue if it isn't one already.
+     * @param key the key
+     * @param value the value
+     * @return the builder
+     */
+    @NotNull
+    public MapBuilder put(@NotNull String key, @Nullable Object value) {
         //noinspection DataFlowIssue // NO ISSUE, WE KNOW jv.map is NOT NULL
-        jv.map.put(s, JsonValue.instance(o));
-        jv.mapOrder.add(s);
+        jv.map.put(key, JsonValue.instance(value));
+        //noinspection DataFlowIssue // NO ISSUE, WE KNOW jv.mapOrder is NOT NULL
+        jv.mapOrder.add(key);
         return this;
     }
 
-    public MapBuilder putEntries(Map<String, ?> map) {
+    /**
+     * Put all entries from the source map into the MapBuilder.
+     * All values are converted to a JsonValue if they aren't one already.
+     * @param map the map
+     * @return the builder
+     */
+    @NotNull
+    public MapBuilder putEntries(@Nullable Map<String, ?> map) {
         if (map != null) {
             for (String key : map.keySet()) {
                 //noinspection DataFlowIssue // NO ISSUE, WE KNOW jv.map is NOT NULL
@@ -46,12 +79,20 @@ public class MapBuilder implements JsonSerializable {
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
+    @NotNull
     public String toJson() {
         return jv.toJson();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
+    @NotNull
     public JsonValue toJsonValue() {
         return jv;
     }

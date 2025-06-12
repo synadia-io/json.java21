@@ -13,24 +13,58 @@
 
 package io.nats.json;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Utility class to build a JsonValue for an array
+ */
 public class ArrayBuilder implements JsonSerializable {
 
-    public final JsonValue jv = new JsonValue(new ArrayList<>());
+    /**
+     * The JsonValue backing this ArrayBuilder
+     */
+    @NotNull
+    public final JsonValue jv;
 
+    /**
+     * Get a new instance of ArrayBuilder
+     */
+    public ArrayBuilder() {
+        jv = new JsonValue(new ArrayList<>());
+    }
+
+    /**
+     * Get an instance of ArrayBuilder
+     * @return an ArrayBuilder instance
+     */
+    @NotNull
     public static ArrayBuilder instance() {
         return new ArrayBuilder();
     }
 
-    public ArrayBuilder add(Object o) {
+    /**
+     * Add an object to the array. The object is converted to a JsonValue if it isn't one already.
+     * @param o the object
+     * @return the builder
+     */
+    @NotNull
+    public ArrayBuilder add(@Nullable Object o) {
         //noinspection DataFlowIssue // NO ISSUE, WE KNOW jv.array is NOT NULL
         jv.array.add(JsonValue.instance(o));
         return this;
     }
 
-    public ArrayBuilder addItems(Collection<?> c) {
+    /**
+     * Add all items in the collection to the array, unless an item is null;
+     * @param c the collection
+     * @return the builder
+     */
+    @NotNull
+    public ArrayBuilder addItems(@Nullable Collection<?> c) {
         if (c != null) {
             for (Object o : c) {
                 //noinspection DataFlowIssue // NO ISSUE, WE KNOW jv.array is NOT NULL
@@ -40,12 +74,20 @@ public class ArrayBuilder implements JsonSerializable {
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
+    @NotNull
     public String toJson() {
         return jv.toJson();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
+    @NotNull
     public JsonValue toJsonValue() {
         return jv;
     }

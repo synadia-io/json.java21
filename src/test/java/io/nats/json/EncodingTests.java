@@ -58,6 +58,9 @@ public final class EncodingTests {
             String uu = "b4\\b\\f\\n\\r\\t" + u + "after";
             _testJsonEncodeDecode(uu, "b4\b\f\n\r\t" + u + "after", uu);
         }
+
+        assertEquals("", Encoding.jsonEncode(null));
+        assertEquals("", Encoding.jsonEncode(new StringBuilder(), null).toString());
     }
 
     private void _testJsonEncodeDecode(String encodedInput, String targetDecode, String targetEncode) {

@@ -16,6 +16,7 @@ package io.nats.json;
 import io.ResourceUtils;
 import org.junit.jupiter.api.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
@@ -32,8 +33,9 @@ public final class JsonValueUtilsTests {
     private static final String TEST_JSON = ResourceUtils.resourceAsString("test.json");
     private static final JsonValue TEST_JV = JsonParser.parseUnchecked(TEST_JSON);
     private static final String STRING_STRING = "Hello";
-    private static final String BASE64_STRING = "AGFiY2RlZgECBAg=";
     private static final String DATE_STRING = "2021-01-25T20:09:10.6225191Z";
+    private static final String BASE64_BASIC_STRING = "AGFiY2RlZgECBAg==";
+    private static final String BASE64_URL_STRING = "AGFiY2RlZgECBAg";
     private static final byte[] BASE64_DECODED = new byte[] {0, 'a', 'b', 'c', 'd', 'e', 'f', 1, 2, 4, 8};
     private static final ZonedDateTime TEST_DATE = DateTimeUtils.parseDateTime(DATE_STRING);
 
@@ -44,7 +46,8 @@ public final class JsonValueUtilsTests {
     private static final String BOOL = "bool";
     private static final String DATE = "date";
     private static final String NANOS = "nanos";
-    private static final String BASE_64 = "base_64";
+    private static final String BASE_64_BASIC = "base_64_basic";
+    private static final String BASE_64_URL = "base_64_url";
     private static final String MAP = "map";
     private static final String ARRAY = "array";
     private static final String MMAP = "mmap";
@@ -77,15 +80,24 @@ public final class JsonValueUtilsTests {
         assertNotNull(b);
         assertEquals(s, new String(b));
 
+        b = readBytes(TEST_JV, STRING, StandardCharsets.UTF_8);
+        assertNotNull(b);
+        assertEquals(s, new String(b));
+
         assertEquals(DATE_STRING, readString(TEST_JV, DATE));
-        assertEquals(BASE64_STRING, readString(TEST_JV, BASE_64));
+        assertEquals(BASE64_BASIC_STRING, readString(TEST_JV, BASE_64_BASIC));
+        assertEquals(BASE64_URL_STRING, readString(TEST_JV, BASE_64_URL));
 
         ZonedDateTime zdt = readDate(TEST_JV, DATE);
         assertEquals(TEST_DATE, zdt);
 
-        b = readBase64(TEST_JV, BASE_64);
+        b = readBase64Basic(TEST_JV, BASE_64_BASIC);
         assertArrayEquals(BASE64_DECODED, b);
-        assertNull(readBase64(TEST_JV, INTEGER));
+        b = readBase64Url(TEST_JV, BASE_64_URL);
+        assertArrayEquals(BASE64_DECODED, b);
+
+        assertNull(readBase64Basic(TEST_JV, INTEGER));
+        assertNull(readBase64Url(TEST_JV, INTEGER));
 
         assertNull(readString(TEST_JV, INTEGER));
         assertNull(readString(TEST_JV, LONG));
@@ -166,14 +178,17 @@ public final class JsonValueUtilsTests {
 
     @Test
     public void testReadBoolean() {
-        assertTrue(readBoolean(TEST_JV, BOOL));
+        Boolean b = readBoolean(TEST_JV, BOOL);
+        assertNotNull(b);
+        assertTrue(b);
+        assertNull(readBoolean(TEST_JV, STRING));
+        assertNull(readBoolean(TEST_JV, INTEGER));
+        assertNull(readBoolean(TEST_JV, LONG));
+        assertNull(readBoolean(TEST_JV, MAP));
+        assertNull(readBoolean(TEST_JV, ARRAY));
+        assertNull(readBoolean(TEST_JV, NOT_A_KEY));
 
-        assertFalse(readBoolean(TEST_JV, STRING));
-        assertFalse(readBoolean(TEST_JV, INTEGER));
-        assertFalse(readBoolean(TEST_JV, LONG));
-        assertFalse(readBoolean(TEST_JV, MAP));
-        assertFalse(readBoolean(TEST_JV, ARRAY));
-        assertFalse(readBoolean(TEST_JV, NOT_A_KEY));
+        assertTrue(readBoolean(TEST_JV, BOOL, true));
 
         assertTrue(readBoolean(TEST_JV, STRING, true));
         assertTrue(readBoolean(TEST_JV, INTEGER, true));
@@ -196,7 +211,7 @@ public final class JsonValueUtilsTests {
         assertEquals(TEST_DATE, t);
 
         assertThrows(DateTimeParseException.class, () -> readDate(TEST_JV, STRING));
-        assertThrows(DateTimeParseException.class, () -> readDate(TEST_JV, BASE_64));
+        assertThrows(DateTimeParseException.class, () -> readDate(TEST_JV, BASE_64_BASIC));
 
         assertNull(readDate(TEST_JV, BOOL));
         assertNull(readDate(TEST_JV, MAP));
@@ -280,8 +295,10 @@ public final class JsonValueUtilsTests {
     public void testArrays() {
         assertNull(listOfOrNull(null, jv -> jv));
         assertNull(listOfOrNull(readValue(TEST_JV, STRING), jv -> jv));
+        assertNotNull(listOfOrNull(readValue(TEST_JV, SLIST), jv -> jv));
         assertTrue(listOfOrEmpty(null, jv -> jv).isEmpty());
         assertTrue(listOfOrEmpty(readValue(TEST_JV, STRING), jv -> jv).isEmpty());
+        assertFalse(listOfOrEmpty(readValue(TEST_JV, SLIST), jv -> jv).isEmpty());
 
         assertNull(readArrayOrNull(TEST_JV, STRING));
         assertTrue(readArrayOrEmpty(TEST_JV, STRING).isEmpty());
@@ -431,7 +448,7 @@ public final class JsonValueUtilsTests {
         validateNotFoundOrWrongType(LONG, true, true, true, true, false, true, true, true);
         validateNotFoundOrWrongType(BOOL, true, true, true, true, true, false, true, true);
         validateNotFoundOrWrongType(DATE, true, false, false, true, true, false, true, true);
-        validateNotFoundOrWrongType(BASE_64, true, false, true, true, true, true, true, true);
+        validateNotFoundOrWrongType(BASE_64_BASIC, true, false, true, true, true, true, true, true);
         validateNotFoundOrWrongType(BIG_DECIMAL, true, true, true, true, true, true, true, true);
         validateNotFoundOrWrongType(MAP, true, true, true, true, true, true, false, true);
         validateNotFoundOrWrongType(ARRAY, true, true, true, true, true, true, true, false);
@@ -460,11 +477,16 @@ public final class JsonValueUtilsTests {
         }
         if (notString) {
             assertNull(readBytes(TEST_JV, key));
+            assertNull(readBytes(TEST_JV, key, StandardCharsets.UTF_8));
             assertNull(readDate(TEST_JV, key));
             if (jv != null) {
-                assertNotSame(Type.STRING, jv.type);
+                assertNotSame(JsonValueType.STRING, jv.type);
                 assertNull(jv.string);
             }
+        }
+        else {
+            assertNotNull(readBytes(TEST_JV, key));
+            assertNotNull(readBytes(TEST_JV, key, StandardCharsets.UTF_8));
         }
         if (notDate) {
             if (jv == null || jv.string == null) {
@@ -483,7 +505,7 @@ public final class JsonValueUtilsTests {
             assertEquals(-1, readLong(TEST_JV, key, -1));
         }
         if (notBoolean) {
-            assertFalse(readBoolean(TEST_JV, key));
+            assertNull(readBoolean(TEST_JV, key));
             assertFalse(readBoolean(TEST_JV, key, false));
         }
 
@@ -495,7 +517,7 @@ public final class JsonValueUtilsTests {
             assertNull(readStringMapOrNull(TEST_JV, key));
             assertEquals(new HashMap<>(), readStringMapOrEmpty(TEST_JV, key));
             if (jv != null) {
-                assertNotSame(Type.MAP, jv.type);
+                assertNotSame(JsonValueType.MAP, jv.type);
                 assertNull(jv.map);
             }
         }
@@ -503,7 +525,7 @@ public final class JsonValueUtilsTests {
             assertNull(readArrayOrNull(TEST_JV, key));
             assertEquals(EMPTY_ARRAY.array, readArrayOrEmpty(TEST_JV, key));
             if (jv != null) {
-                assertNotSame(Type.ARRAY, jv.type);
+                assertNotSame(JsonValueType.ARRAY, jv.type);
                 assertNull(jv.array);
             }
         }

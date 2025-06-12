@@ -54,6 +54,13 @@ public final class DateTimeUtilsTests {
     }
 
     @Test
+    public void testGmtNow() {
+        long now = Instant.now().toEpochMilli();
+        long gnow = DateTimeUtils.gmtNow().toInstant().toEpochMilli();
+        assertTrue(gnow - now < 50);
+    }
+
+    @Test
     public void testFromNow() {
         long now = Instant.now().toEpochMilli();
         long then = Instant.from(DateTimeUtils.fromNow(5000)).toEpochMilli();
