@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package io.nats.json;
+package io.synadia.json;
 
 import io.ResourceUtils;
 import org.junit.jupiter.api.Test;
@@ -25,8 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.nats.json.JsonValue.*;
-import static io.nats.json.JsonValueUtils.*;
+import static io.synadia.json.JsonValue.*;
+import static io.synadia.json.JsonValueUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public final class JsonValueUtilsTests {

@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package io.nats.json;
+package io.synadia.json;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +21,7 @@ import java.math.BigInteger;
 import java.time.Duration;
 import java.util.*;
 
-import static io.nats.json.Encoding.jsonEncode;
+import static io.synadia.json.Encoding.jsonEncode;
 
 /**
  * An object representing a JSON value

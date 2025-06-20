@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package io.nats.json;
+package io.synadia.json;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,9 +22,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
-import static io.nats.json.DateTimeUtils.DEFAULT_TIME;
-import static io.nats.json.Encoding.jsonEncode;
-import static io.nats.json.JsonValue.instance;
+import static io.synadia.json.DateTimeUtils.DEFAULT_TIME;
+import static io.synadia.json.Encoding.jsonEncode;
+import static io.synadia.json.JsonValue.instance;
 
 /**
  * Utility to help write correct JSON.

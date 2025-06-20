@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package io.nats.json;
+package io.synadia.json;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -21,8 +21,8 @@ import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static io.nats.json.DateTimeUtils.DEFAULT_TIME;
-import static io.nats.json.JsonWriteUtils.*;
+import static io.synadia.json.DateTimeUtils.DEFAULT_TIME;
+import static io.synadia.json.JsonWriteUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public final class JsonWriteUtilsTests {

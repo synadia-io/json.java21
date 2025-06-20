@@ -1,4 +1,4 @@
-package io.nats.json;
+package io.synadia.json;
 
 import java.io.IOException;
 

@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package io.nats.json;
+package io.synadia.json;
 
 import io.ResourceUtils;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -25,13 +25,13 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
 
-import static io.nats.json.Encoding.jsonEncode;
-import static io.nats.json.JsonParser.Option.KEEP_NULLS;
-import static io.nats.json.JsonParser.parse;
-import static io.nats.json.JsonParser.parseUnchecked;
-import static io.nats.json.JsonValue.instance;
-import static io.nats.json.JsonWriteUtils.printFormatted;
-import static io.nats.json.JsonWriteUtils.toKey;
+import static io.synadia.json.Encoding.jsonEncode;
+import static io.synadia.json.JsonParser.Option.KEEP_NULLS;
+import static io.synadia.json.JsonParser.parse;
+import static io.synadia.json.JsonParser.parseUnchecked;
+import static io.synadia.json.JsonValue.instance;
+import static io.synadia.json.JsonWriteUtils.printFormatted;
+import static io.synadia.json.JsonWriteUtils.toKey;
 import static org.junit.jupiter.api.Assertions.*;
 
 public final class JsonParsingTests {
