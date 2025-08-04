@@ -105,7 +105,7 @@ public abstract class JsonWriteUtils {
     }
 
     /**
-     * Create StringBuilder with an open squiggly bracket { and a system specific line separator
+     * Create StringBuilder with an open squiggly bracket { and a system-specific line separator
      * @return the StringBuilder
      */
     @NotNull
@@ -114,7 +114,7 @@ public abstract class JsonWriteUtils {
     }
 
     /**
-     * End a StringBuilder of formatted json with the system specific line separator
+     * End a StringBuilder of formatted JSON with the system-specific line separator
      * @param sb the StringBuilder to append to
      * @return the string
      */
@@ -124,11 +124,11 @@ public abstract class JsonWriteUtils {
         return sb.append(System.lineSeparator())
             .append("}")
             .toString()
-            .replaceAll(",", "," + System.lineSeparator() + "    ");
+            .replace(",", "," + System.lineSeparator() + "    ");
     }
 
     /**
-     * Appends a field for a raw json value unless the json string is null or empty.
+     * Appends a field for a raw JSON value unless the JSON string is null or empty.
      * @param sb string builder
      * @param fieldName the field name
      * @param json raw JSON
@@ -389,7 +389,7 @@ public abstract class JsonWriteUtils {
         default boolean appendable(T t) { return t != null; }
 
         /**
-         * Append the object's json value representation
+         * Append the object's JSON value representation
          * @param sb the target SringBuilder
          * @param t the object
          */
@@ -581,7 +581,7 @@ public abstract class JsonWriteUtils {
     // ----------------------------------------------------------------------------------------------------
 
     /**
-     * Get the key string portion of a json key value using the class simple name as the field name
+     * Get the key string portion of a JSON key value using the class simple name as the field name
      * @param c the class
      * @return the key string
      */
@@ -591,7 +591,7 @@ public abstract class JsonWriteUtils {
     }
 
     /**
-     * Get the key string portion of a json key value using the class simple name as the field name
+     * Get the key string portion of a JSON key value using the class simple name as the field name
      * @param fieldName the field name
      * @return the key string
      */
@@ -607,7 +607,7 @@ public abstract class JsonWriteUtils {
     }
 
     /**
-     * Get a string formatted for easy reading. Assumes the object's toString returns valid json.
+     * Get a string formatted for easy reading. Assumes the object's toString returns valid JSON.
      * @param o the object
      * @return the formatted string
      */
@@ -627,8 +627,8 @@ public abstract class JsonWriteUtils {
     }
 
     /**
-     * Get a string formatted for easy reading. Assumes valid json
-     * @param json the json string
+     * Get a string formatted for easy reading. Assumes valid JSON
+     * @param json the JSON string
      * @return the formatted string
      */
     @NotNull
@@ -689,7 +689,7 @@ public abstract class JsonWriteUtils {
     }
 
     /**
-     * Print the object to System.out, formatted for easy reading. Assumes the object's toString returns valid json.
+     * Print the object to System.out, formatted for easy reading. Assumes the object's toString returns valid JSON.
      * @param o the object
      */
     public static void printFormatted(@NotNull Object o) {
@@ -697,7 +697,7 @@ public abstract class JsonWriteUtils {
     }
 
     /**
-     * Print the json to System.out, formatted for easy reading
+     * Print the JSON to System.out, formatted for easy reading
      * @param js a JsonSerializable object
      */
     public static void printFormatted(@NotNull JsonSerializable js) {
@@ -705,8 +705,8 @@ public abstract class JsonWriteUtils {
     }
 
     /**
-     * Print the string to System.out, formatted for easy reading. Assumes valid json
-     * @param json the json string
+     * Print the string to System.out, formatted for easy reading. Assumes valid JSON
+     * @param json the JSON string
      */
     public static void printFormatted(@NotNull String json) {
         System.out.println(getFormatted(json));
