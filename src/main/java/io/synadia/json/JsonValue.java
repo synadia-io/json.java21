@@ -409,18 +409,18 @@ public class JsonValue implements JsonSerializable {
     }
 
     /**
-     * Create a json string using the class simple name as the key for the entire object
+     * Create a JSON string using the class simple name as the key for the entire object
      * @param c the class
-     * @return the json string
+     * @return the JSON string
      */
     public String toString(Class<?> c) {
         return JsonWriteUtils.toKey(c) + toJson();
     }
 
     /**
-     * Create a json string using the class simple name as the key for the entire object
+     * Create a JSON string using the class simple name as the key for the entire object
      * @param key the field name
-     * @return the json string
+     * @return the JSON string
      */
     public String toString(String key) {
         return JsonWriteUtils.toKey(key) + toJson();

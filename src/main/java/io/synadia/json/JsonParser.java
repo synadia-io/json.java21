@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Class that can parse json to a JsonValue
+ * Class that can parse JSON to a JsonValue
  */
 public class JsonParser {
 
@@ -40,8 +40,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a char array
-     * @param json the json
+     * Parse JSON from a char array
+     * @param json the JSON
      * @return the JsonValue
      * @throws JsonParseException if there is a problem parsing
      */
@@ -51,8 +51,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a char array, starting at the index
-     * @param json the json
+     * Parse JSON from a char array, starting at the index
+     * @param json the JSON
      * @param startIndex the starting index in the array
      * @return the JsonValue
      * @throws JsonParseException if there is a problem parsing
@@ -63,8 +63,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a char array
-     * @param json the json
+     * Parse JSON from a char array
+     * @param json the JSON
      * @param options options for how to parse
      * @return the JsonValue
      * @throws JsonParseException if there is a problem parsing
@@ -75,8 +75,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a char array
-     * @param json the json
+     * Parse JSON from a char array
+     * @param json the JSON
      * @param startIndex the starting index in the array
      * @param options options for how to parse
      * @return the JsonValue
@@ -89,8 +89,8 @@ public class JsonParser {
 
 
     /**
-     * Parse Json from a String
-     * @param json the json
+     * Parse JSON from a String
+     * @param json the JSON
      * @return the JsonValue
      * @throws JsonParseException if there is a problem parsing
      */
@@ -101,8 +101,8 @@ public class JsonParser {
 
 
     /**
-     * Parse Json from a String
-     * @param json the json
+     * Parse JSON from a String
+     * @param json the JSON
      * @param startIndex the starting index in the string
      * @return the JsonValue
      * @throws JsonParseException if there is a problem parsing
@@ -113,8 +113,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a String
-     * @param json the json
+     * Parse JSON from a String
+     * @param json the JSON
      * @param options options for how to parse
      * @return the JsonValue
      * @throws JsonParseException if there is a problem parsing
@@ -125,8 +125,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a String
-     * @param json the json
+     * Parse JSON from a String
+     * @param json the JSON
      * @param startIndex the starting index in the array
      * @param options options for how to parse
      * @return the JsonValue
@@ -138,8 +138,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a byte array
-     * @param json the json
+     * Parse JSON from a byte array
+     * @param json the JSON
      * @return the JsonValue
      * @throws JsonParseException if there is a problem parsing
      */
@@ -149,8 +149,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a byte array
-     * @param json the json
+     * Parse JSON from a byte array
+     * @param json the JSON
      * @param startIndex the starting index in the array
      * @return the JsonValue
      * @throws JsonParseException if there is a problem parsing
@@ -161,8 +161,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a byte array
-     * @param json the json
+     * Parse JSON from a byte array
+     * @param json the JSON
      * @param options options for how to parse
      * @return the JsonValue
      * @throws JsonParseException if there is a problem parsing
@@ -173,8 +173,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a byte array
-     * @param json the json
+     * Parse JSON from a byte array
+     * @param json the JSON
      * @param startIndex the starting index in the array
      * @param options options for how to parse
      * @return the JsonValue
@@ -186,8 +186,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a char array
-     * @param json the json
+     * Parse JSON from a char array
+     * @param json the JSON
      * @return the JsonValue
      * @throws RuntimeException if there is a problem parsing
      */
@@ -198,8 +198,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a char array
-     * @param json the json
+     * Parse JSON from a char array
+     * @param json the JSON
      * @param startIndex the starting index in the array
      * @return the JsonValue
      * @throws RuntimeException if there is a problem parsing
@@ -211,8 +211,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a char array
-     * @param json the json
+     * Parse JSON from a char array
+     * @param json the JSON
      * @param options options for how to parse
      * @return the JsonValue
      * @throws RuntimeException if there is a problem parsing
@@ -224,8 +224,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a char array
-     * @param json the json
+     * Parse JSON from a char array
+     * @param json the JSON
      * @param startIndex the starting index in the array
      * @param options options for how to parse
      * @return the JsonValue
@@ -238,8 +238,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a String
-     * @param json the json
+     * Parse JSON from a String
+     * @param json the JSON
      * @return the JsonValue
      * @throws RuntimeException if there is a problem parsing
      */
@@ -250,8 +250,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a String
-     * @param json the json
+     * Parse JSON from a String
+     * @param json the JSON
      * @param startIndex the starting index in the string
      * @return the JsonValue
      * @throws RuntimeException if there is a problem parsing
@@ -263,8 +263,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a String
-     * @param json the json
+     * Parse JSON from a String
+     * @param json the JSON
      * @param options options for how to parse
      * @return the JsonValue
      * @throws RuntimeException if there is a problem parsing
@@ -276,8 +276,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a String
-     * @param json the json
+     * Parse JSON from a String
+     * @param json the JSON
      * @param startIndex the starting index in the string
      * @param options options for how to parse
      * @return the JsonValue
@@ -290,8 +290,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a byte array
-     * @param json the json
+     * Parse JSON from a byte array
+     * @param json the JSON
      * @return the JsonValue
      * @throws RuntimeException if there is a problem parsing
      */
@@ -302,8 +302,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a byte array
-     * @param json the json
+     * Parse JSON from a byte array
+     * @param json the JSON
      * @param startIndex the starting index in the array
      * @return the JsonValue
      * @throws RuntimeException if there is a problem parsing
@@ -315,8 +315,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a byte array
-     * @param json the json
+     * Parse JSON from a byte array
+     * @param json the JSON
      * @param options options for how to parse
      * @return the JsonValue
      * @throws RuntimeException if there is a problem parsing
@@ -328,8 +328,8 @@ public class JsonParser {
     }
 
     /**
-     * Parse Json from a byte array
-     * @param json the json
+     * Parse JSON from a byte array
+     * @param json the JSON
      * @param startIndex the starting index in the array
      * @param options options for how to parse
      * @return the JsonValue
@@ -352,7 +352,7 @@ public class JsonParser {
 
     /**
      * Create a new JsonParse object from a char array
-     * @param json the json
+     * @param json the JSON
      */
     public JsonParser(char @Nullable [] json) {
         this(json, 0);
@@ -360,7 +360,7 @@ public class JsonParser {
 
     /**
      * Create a new JsonParse object from a char array
-     * @param json the json
+     * @param json the JSON
      * @param options options for how to parse
      */
     public JsonParser(char @Nullable [] json, @Nullable Option... options) {
@@ -369,7 +369,7 @@ public class JsonParser {
 
     /**
      * Create a new JsonParse object from a char array
-     * @param json the json
+     * @param json the JSON
      * @param startIndex the starting index in the array
      * @param options options for how to parse
      */
@@ -390,7 +390,7 @@ public class JsonParser {
     }
 
     /**
-     * Parse the json
+     * Parse the JSON
      * @return a JsonValue
      * @throws JsonParseException if there is a problem parsing
      */
