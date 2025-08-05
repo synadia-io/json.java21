@@ -1,25 +1,25 @@
 ![NATS](src/main/javadoc/images/large-logo.png)
 
-# JNATS JSON
+# JNATS JSON JAVA 21
 
-This library is a JSON Parser built specifically for JNATS to avoid a 3rd party library dependency.
+This library is a JSON Parser built specifically for JNATS to avoid a third party library dependency, and using Java 21 
 
-It has been extracted and repackaged from the JNATS library as part of the effort to upgrade and repackage the JNATS client. 
+It was originally extracted and repackaged from the JNATS library. 
 
 **Current Release**: 0.0.0 &nbsp; **Current Snapshot**: 3.0.0-SNAPSHOT
 
 [![License Apache 2](https://img.shields.io/badge/License-Apache2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.synadia/jnats-json/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.synadia/jnats-json)
-[![Javadoc](http://javadoc.io/badge/io.synadia/jnats-json.svg?branch=main)](http://javadoc.io/doc/io.synadia/jnats-json?branch=main)
-[![Coverage Status](https://coveralls.io/repos/github/synadia-io/json.java/badge.svg?branch=main)](https://coveralls.io/github/synadia-io/json.java?branch=main)
-[![Build Main Badge](https://github.com/synadia-io/json.java/actions/workflows/build-main.yml/badge.svg?event=push)](https://github.com/synadia-io/json.java/actions/workflows/build-main.yml)
-[![Release Badge](https://github.com/synadia-io/json.java/actions/workflows/build-release.yml/badge.svg?event=release)](https://github.com/synadia-io/json.java/actions/workflows/build-release.yml)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.synadia/jnats-json21/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.synadia/jnats-json21)
+[![Javadoc](http://javadoc.io/badge/io.synadia/jnats-json21.svg?branch=main)](http://javadoc.io/doc/io.synadia/jnats-json21?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/synadia-io/json.java21/badge.svg?branch=main)](https://coveralls.io/github/synadia-io/json.java21?branch=main)
+[![Build Main Badge](https://github.com/synadia-io/json.java21/actions/workflows/build-main.yml/badge.svg?event=push)](https://github.com/synadia-io/json.java21/actions/workflows/build-main.yml)
+[![Release Badge](https://github.com/synadia-io/json.java21/actions/workflows/build-release.yml/badge.svg?event=release)](https://github.com/synadia-io/json.java21/actions/workflows/build-release.yml)
 
 ### Gradle
 
 ```groovy
 dependencies {
-    implementation 'io.synadia:jnats-json:{major.minor.patch}'
+    implementation 'io.synadia:jnats-json-21:{major.minor.patch}'
 }
 ```
 
@@ -45,7 +45,7 @@ repositories {
 }
 
 dependencies {
-   implementation 'io.synadia:jnats-json:{major.minor.patch}-SNAPSHOT'
+   implementation 'io.synadia:jnats-json-21:{major.minor.patch}-SNAPSHOT'
 }
 ```
 
@@ -54,7 +54,7 @@ dependencies {
 ```xml
 <dependency>
     <groupId>io.synadia</groupId>
-    <artifactId>jnats-json</artifactId>
+    <artifactId>jnats-json-21</artifactId>
     <version>{major.minor.patch}</version>
 </dependency>
 ```
@@ -88,7 +88,7 @@ If you need a snapshot version, you must enable snapshots and change your depend
 
 <dependency>
     <groupId>io.synadia</groupId>
-    <artifactId>jnats-json</artifactId>
+    <artifactId>jnats-json-21</artifactId>
     <version>{major.minor.patch}-SNAPSHOT</version>
 </dependency>
 ```
