@@ -1,4 +1,4 @@
-// Copyright 2025 The NATS Authors
+// Copyright 2025 Synadia Communications, Inc.
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -13,8 +13,8 @@
 
 package io.synadia.json;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,7 +27,7 @@ public class ArrayBuilder implements JsonSerializable {
     /**
      * The JsonValue backing this ArrayBuilder
      */
-    @NotNull
+    @NonNull
     public final JsonValue jv;
 
     /**
@@ -41,7 +41,7 @@ public class ArrayBuilder implements JsonSerializable {
      * Get an instance of ArrayBuilder
      * @return an ArrayBuilder instance
      */
-    @NotNull
+    @NonNull
     public static ArrayBuilder instance() {
         return new ArrayBuilder();
     }
@@ -51,7 +51,7 @@ public class ArrayBuilder implements JsonSerializable {
      * @param o the object
      * @return the builder
      */
-    @NotNull
+    @NonNull
     public ArrayBuilder add(@Nullable Object o) {
         //noinspection DataFlowIssue // NO ISSUE, WE KNOW jv.array is NOT NULL
         jv.array.add(JsonValue.instance(o));
@@ -63,7 +63,7 @@ public class ArrayBuilder implements JsonSerializable {
      * @param c the collection
      * @return the builder
      */
-    @NotNull
+    @NonNull
     public ArrayBuilder addItems(@Nullable Collection<?> c) {
         if (c != null) {
             for (Object o : c) {
@@ -78,7 +78,7 @@ public class ArrayBuilder implements JsonSerializable {
      * {@inheritDoc}
      */
     @Override
-    @NotNull
+    @NonNull
     public String toJson() {
         return jv.toJson();
     }
@@ -87,7 +87,7 @@ public class ArrayBuilder implements JsonSerializable {
      * {@inheritDoc}
      */
     @Override
-    @NotNull
+    @NonNull
     public JsonValue toJsonValue() {
         return jv;
     }

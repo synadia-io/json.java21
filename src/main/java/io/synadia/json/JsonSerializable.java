@@ -1,4 +1,4 @@
-// Copyright 2021-2025 The NATS Authors
+// Copyright 2025 Synadia Communications, Inc.
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -13,7 +13,7 @@
 
 package io.synadia.json;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.nio.charset.StandardCharsets;
 
@@ -26,7 +26,7 @@ public interface JsonSerializable {
      * Get the String version of the JSON object
      * @return the string
      */
-    @NotNull
+    @NonNull
     String toJson();
 
     /**
@@ -34,7 +34,7 @@ public interface JsonSerializable {
      * The built-in default implementation uses the toJson() and converts it to a string.
      * @return the byte array
      */
-    default byte @NotNull [] serialize() {
+    default byte @NonNull [] serialize() {
         return toJson().getBytes(StandardCharsets.UTF_8);
     }
 
@@ -44,7 +44,7 @@ public interface JsonSerializable {
      * It assumes that you have valid JSON
      * @return the JsonValue
      */
-    @NotNull
+    @NonNull
     default JsonValue toJsonValue() {
         return JsonParser.parseUnchecked(toJson());
     }

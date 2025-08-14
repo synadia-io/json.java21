@@ -1,4 +1,4 @@
-// Copyright 2025 The NATS Authors
+// Copyright 2025 Synadia Communications, Inc.
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -16,7 +16,7 @@ package io.synadia.json;
 import io.ResourceUtils;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -26,9 +26,8 @@ import java.time.Duration;
 import java.util.*;
 
 import static io.synadia.json.Encoding.jsonEncode;
+import static io.synadia.json.JsonParser.*;
 import static io.synadia.json.JsonParser.Option.KEEP_NULLS;
-import static io.synadia.json.JsonParser.parse;
-import static io.synadia.json.JsonParser.parseUnchecked;
 import static io.synadia.json.JsonValue.instance;
 import static io.synadia.json.JsonWriteUtils.printFormatted;
 import static io.synadia.json.JsonWriteUtils.toKey;
@@ -378,9 +377,9 @@ public final class JsonParsingTests {
         validateThrows("{\"foo\":1 ]", "Expected a ',' or '}'.");
         validateThrows("{\"foo\" 1", "Expected a ':' after a key.");
         validateThrows("[\"bad\",", "Unexpected end of data."); // missing close
-        validateThrows("[1Z]", "Invalid value.");
-        validateThrows("t", "Invalid value.");
-        validateThrows("f", "Invalid value.");
+        validateThrows("[1Z]", INVALID_VALUE);
+        validateThrows("t", INVALID_VALUE);
+        validateThrows("f", INVALID_VALUE);
         validateThrows("\"u", "Unterminated string.");
         validateThrows("\"u\r", "Unterminated string.");
         validateThrows("\"u\n", "Unterminated string.");
@@ -521,26 +520,26 @@ public final class JsonParsingTests {
         String str = new BigInteger( Long.toString(Long.MAX_VALUE) ).add( BigInteger.ONE ).toString();
         assertEquals(JsonValueType.BIG_INTEGER, parse(str).type);
 
-        validateThrows("-0x123", "Invalid value.");
+        validateThrows("-0x123", INVALID_VALUE);
         JsonParseException e;
 
         e = assertThrows(JsonParseException.class, () -> parse("-"));
-        assertTrue(e.getMessage().contains("Invalid value."));
+        assertTrue(e.getMessage().contains(INVALID_VALUE));
 
         e = assertThrows(JsonParseException.class, () -> parse("00"));
-        assertTrue(e.getMessage().contains("Invalid value."));
+        assertTrue(e.getMessage().contains(INVALID_VALUE));
 
         e = assertThrows(JsonParseException.class, () -> parse("NaN"));
-        assertTrue(e.getMessage().contains("Invalid value."));
+        assertTrue(e.getMessage().contains(INVALID_VALUE));
 
         e = assertThrows(JsonParseException.class, () -> parse("-NaN"));
-        assertTrue(e.getMessage().contains("Invalid value."));
+        assertTrue(e.getMessage().contains(INVALID_VALUE));
 
         e = assertThrows(JsonParseException.class, () -> parse("Infinity"));
-        assertTrue(e.getMessage().contains("Invalid value."));
+        assertTrue(e.getMessage().contains(INVALID_VALUE));
 
         e = assertThrows(JsonParseException.class, () -> parse("-Infinity"));
-        assertTrue(e.getMessage().contains("Invalid value."));
+        assertTrue(e.getMessage().contains(INVALID_VALUE));
     }
 
     @Test
@@ -552,7 +551,7 @@ public final class JsonParsingTests {
 
     static class TestSerializableMap implements JsonSerializable {
         @Override
-        @NotNull
+        @NonNull
         public String toJson() {
             JsonValue v = new JsonValue(new HashMap<>());
             //noinspection DataFlowIssue // NO ISSUE, WE KNOW jv.map is NOT NULL
@@ -565,7 +564,7 @@ public final class JsonParsingTests {
 
     static class TestSerializableList implements JsonSerializable {
         @Override
-        @NotNull
+        @NonNull
         public String toJson() {
             JsonValue v = new JsonValue(new ArrayList<>());
             //noinspection DataFlowIssue // NO ISSUE, WE KNOW jv.array is NOT NULL
@@ -811,7 +810,6 @@ public final class JsonParsingTests {
         assertNotNull(e2.getCause());
         assertEquals("java.lang.Exception: cause", e3.getMessage());
         assertNotNull(e3.getCause());
-
     }
 
     @Test

@@ -1,4 +1,4 @@
-// Copyright 2020-2025 The NATS Authors
+// Copyright 2025 Synadia Communications, Inc.
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -13,8 +13,8 @@
 
 package io.synadia.json;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -32,19 +32,19 @@ public abstract class DateTimeUtils {
     /**
      * The ZoneId for GMT
      */
-    @NotNull
+    @NonNull
     public static final ZoneId ZONE_ID_GMT = ZoneId.of("GMT");
 
     /**
      * The ZoneDateTime uses as a default, can be used instead of null
      */
-    @NotNull
+    @NonNull
     public static final ZonedDateTime DEFAULT_TIME = ZonedDateTime.of(1, 1, 1, 0, 0, 0, 0, ZONE_ID_GMT);
 
     /**
      * The formatter to crate RFC 3339 strings from dates.
      */
-    @NotNull
+    @NonNull
     public static final DateTimeFormatter RFC3339_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn'Z'");
 
     /**
@@ -52,8 +52,8 @@ public abstract class DateTimeUtils {
      * @param zonedDateTime the input
      * @return the output
      */
-    @NotNull
-    public static ZonedDateTime toGmt(@NotNull ZonedDateTime zonedDateTime) {
+    @NonNull
+    public static ZonedDateTime toGmt(@NonNull ZonedDateTime zonedDateTime) {
         return zonedDateTime.withZoneSameInstant(ZONE_ID_GMT);
     }
 
@@ -61,7 +61,7 @@ public abstract class DateTimeUtils {
      * Get an instance of ZonedDateTime.now(), but for the GMT timezone
      * @return the current date-time using the system clock in GMT
      */
-    @NotNull
+    @NonNull
     public static ZonedDateTime gmtNow() {
         return ZonedDateTime.now().withZoneSameInstant(ZONE_ID_GMT);
     }
@@ -83,8 +83,8 @@ public abstract class DateTimeUtils {
      * @param zonedDateTime the input
      * @return the formatted string
      */
-    @NotNull
-    public static String toRfc3339(@NotNull ZonedDateTime zonedDateTime) {
+    @NonNull
+    public static String toRfc3339(@NonNull ZonedDateTime zonedDateTime) {
         return RFC3339_FORMATTER.format(toGmt(zonedDateTime));
     }
 
@@ -93,8 +93,8 @@ public abstract class DateTimeUtils {
      * @param dateTime - date time from the server.
      * @return a Zoned Date time.
      */
-    @NotNull
-    public static ZonedDateTime parseDateTime(@NotNull String dateTime) {
+    @NonNull
+    public static ZonedDateTime parseDateTime(@NonNull String dateTime) {
         return parseDateTime(dateTime, DEFAULT_TIME);
     }
 
@@ -104,8 +104,8 @@ public abstract class DateTimeUtils {
      * @param dflt - the default ZoneDateTime to use if the input string exceptions while parsing
      * @return a ZonedDateTime.
      */
-    @NotNull
-    public static ZonedDateTime parseDateTime(@NotNull String dateTime, @NotNull ZonedDateTime dflt) {
+    @NonNull
+    public static ZonedDateTime parseDateTime(@NonNull String dateTime, @NonNull ZonedDateTime dflt) {
         try {
             return toGmt(ZonedDateTime.parse(dateTime));
         }
@@ -119,8 +119,8 @@ public abstract class DateTimeUtils {
      * @param dateTime - date time from the server.
      * @return a ZonedDateTime.
      */
-    @NotNull
-    public static ZonedDateTime parseDateTimeThrowParseError(@NotNull String dateTime) {
+    @NonNull
+    public static ZonedDateTime parseDateTimeThrowParseError(@NonNull String dateTime) {
         return toGmt(ZonedDateTime.parse(dateTime));
     }
 
@@ -129,7 +129,7 @@ public abstract class DateTimeUtils {
      * @param millis the millis from now value
      * @return a ZonedDateTime.
      */
-    @NotNull
+    @NonNull
     public static ZonedDateTime fromNow(long millis) {
         return ZonedDateTime.ofInstant(Instant.now().plusMillis(millis), ZONE_ID_GMT);
     }
@@ -139,8 +139,8 @@ public abstract class DateTimeUtils {
      * @param dur the duration to use the millis for from now
      * @return a ZonedDateTime.
      */
-    @NotNull
-    public static ZonedDateTime fromNow(@NotNull Duration dur) {
+    @NonNull
+    public static ZonedDateTime fromNow(@NonNull Duration dur) {
         return ZonedDateTime.ofInstant(Instant.now().plusMillis(dur.toMillis()), ZONE_ID_GMT);
     }
 }

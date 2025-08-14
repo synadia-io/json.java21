@@ -1,4 +1,4 @@
-// Copyright 2023-2025 The NATS Authors
+// Copyright 2025 Synadia Communications, Inc.
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -13,8 +13,8 @@
 
 package io.synadia.json;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -31,43 +31,43 @@ public class JsonValue implements JsonSerializable {
     /**
      * A JsonValue for JsonValueType.NULL
      */
-    @NotNull
+    @NonNull
     public static final JsonValue NULL = new JsonValue(JsonValueType.NULL);
 
     /**
      * A JsonValue for boolean true
      */
-    @NotNull
+    @NonNull
     public static final JsonValue TRUE = new JsonValue(true);
 
     /**
      * A JsonValue for boolean false
      */
-    @NotNull
+    @NonNull
     public static final JsonValue FALSE = new JsonValue(false);
 
     /**
      * The backing map for an {@code EMPTY_MAP}
      */
-    @NotNull
+    @NonNull
     public static final Map<String, JsonValue> EMPTY_MAP_MAP = Collections.unmodifiableMap(new HashMap<>());
 
     /**
      * A JsonValue representing an object that is an empty map
      */
-    @NotNull
+    @NonNull
     public static final JsonValue EMPTY_MAP = new JsonValue(JsonValueType.MAP);
 
     /**
      * The backing array for an {@code EMPTY_ARRAY}
      */
-    @NotNull
+    @NonNull
     public static final List<JsonValue> EMPTY_ARRAY_LIST = Collections.unmodifiableList(new ArrayList<>());
 
     /**
      * A JsonValue representing an object that is an empty array
      */
-    @NotNull
+    @NonNull
     public static final JsonValue EMPTY_ARRAY = new JsonValue(JsonValueType.ARRAY);
 
     private static final char QUOTE = '"';
@@ -137,7 +137,7 @@ public class JsonValue implements JsonSerializable {
     /**
      * The JsonValueType of the object
      */
-    @NotNull
+    @NonNull
     public final JsonValueType type;
 
     /**
@@ -377,7 +377,7 @@ public class JsonValue implements JsonSerializable {
      * Special internal constructor for empty and null
      * @param type the type;
      */
-    private JsonValue(@NotNull JsonValueType type) {
+    private JsonValue(@NonNull JsonValueType type) {
         this.type = type;
 
         string = null;
@@ -432,14 +432,14 @@ public class JsonValue implements JsonSerializable {
     }
 
     @Override
-    @NotNull
+    @NonNull
     public JsonValue toJsonValue() {
         return this;
     }
 
     @SuppressWarnings("DataFlowIssue") // by checking the type we know what the backing item is
     @Override
-    @NotNull
+    @NonNull
     public String toJson() {
         return switch (type) {
             case STRING -> QUOTE + jsonEncode(string) + QUOTE;

@@ -1,4 +1,4 @@
-// Copyright 2020-2025 The NATS Authors
+// Copyright 2025 Synadia Communications, Inc.
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -13,8 +13,8 @@
 
 package io.synadia.json;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -46,7 +46,7 @@ public abstract class JsonWriteUtils {
      * Create StringBuilder with an open squiggly bracket {
      * @return the StringBuilder
      */
-    @NotNull
+    @NonNull
     public static StringBuilder beginJson() {
         return new StringBuilder("{");
     }
@@ -55,7 +55,7 @@ public abstract class JsonWriteUtils {
      * Create StringBuilder with an open square bracket {
      * @return the StringBuilder
      */
-    @NotNull
+    @NonNull
     public static StringBuilder beginArray() {
         return new StringBuilder("[");
     }
@@ -65,7 +65,7 @@ public abstract class JsonWriteUtils {
      * @param prefix the prefix
      * @return the StringBuilder
      */
-    @NotNull
+    @NonNull
     public static StringBuilder beginJsonPrefixed(@Nullable String prefix) {
         return prefix == null ? beginJson()
             : new StringBuilder(prefix).append('{');
@@ -76,8 +76,8 @@ public abstract class JsonWriteUtils {
      * @param sb the StringBuilder
      * @return the StringBuilder
      */
-    @NotNull
-    public static StringBuilder endJson(@NotNull StringBuilder sb) {
+    @NonNull
+    public static StringBuilder endJson(@NonNull StringBuilder sb) {
         int lastIndex = sb.length() - 1;
         if (sb.charAt(lastIndex) == ',') {
             sb.setCharAt(lastIndex, '}');
@@ -93,8 +93,8 @@ public abstract class JsonWriteUtils {
      * @param sb the StringBuilder to append to
      * @return the StringBuilder
      */
-    @NotNull
-    public static StringBuilder endArray(@NotNull StringBuilder sb) {
+    @NonNull
+    public static StringBuilder endArray(@NonNull StringBuilder sb) {
         int lastIndex = sb.length() - 1;
         if (sb.charAt(lastIndex) == ',') {
             sb.setCharAt(lastIndex, ']');
@@ -108,7 +108,7 @@ public abstract class JsonWriteUtils {
      * Create StringBuilder with an open squiggly bracket { and a system-specific line separator
      * @return the StringBuilder
      */
-    @NotNull
+    @NonNull
     public static StringBuilder beginFormattedJson() {
         return new StringBuilder("{" + System.lineSeparator() + "    ");
     }
@@ -118,8 +118,8 @@ public abstract class JsonWriteUtils {
      * @param sb the StringBuilder to append to
      * @return the string
      */
-    @NotNull
-    public static String endFormattedJson(@NotNull StringBuilder sb) {
+    @NonNull
+    public static String endFormattedJson(@NonNull StringBuilder sb) {
         sb.setLength(sb.length()-1);
         return sb.append(System.lineSeparator())
             .append("}")
@@ -133,7 +133,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param json raw JSON
      */
-    public static void addRawJson(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable String json) {
+    public static void addRawJson(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable String json) {
         if (json != null && !json.isEmpty()) {
             sb.append(Q);
             jsonEncode(sb, fieldName);
@@ -147,7 +147,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param value JsonSerializable value
      */
-    public static void addField(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable JsonSerializable value) {
+    public static void addField(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable JsonSerializable value) {
         if (value != null) {
             sb.append(Q);
             jsonEncode(sb, fieldName);
@@ -161,7 +161,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param value field value
      */
-    public static void addField(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable String value) {
+    public static void addField(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable String value) {
         if (value != null && !value.isEmpty()) {
             sb.append(Q);
             jsonEncode(sb, fieldName);
@@ -177,7 +177,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param value field value
      */
-    public static void addFieldAlways(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable String value) {
+    public static void addFieldAlways(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable String value) {
         sb.append(Q);
         jsonEncode(sb, fieldName);
         sb.append(QCOLONQ);
@@ -193,7 +193,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param value field value
      */
-    public static void addField(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Boolean value) {
+    public static void addField(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Boolean value) {
         if (value != null && value) {
             sb.append(Q);
             jsonEncode(sb, fieldName);
@@ -207,7 +207,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param value field value
      */
-    public static void addFieldAlways(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Boolean value) {
+    public static void addFieldAlways(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Boolean value) {
         sb.append(Q);
         jsonEncode(sb, fieldName);
         sb.append(QCOLON).append(value != null && value ? "true" : "false").append(COMMA);
@@ -219,7 +219,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param value field value
      */
-    public static void addField(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Integer value) {
+    public static void addField(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Integer value) {
         if (value != null && value >= 0) {
             sb.append(Q);
             jsonEncode(sb, fieldName);
@@ -233,7 +233,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param value field value
      */
-    public static void addFieldWhenGtZero(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Integer value) {
+    public static void addFieldWhenGtZero(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Integer value) {
         if (value != null && value > 0) {
             sb.append(Q);
             jsonEncode(sb, fieldName);
@@ -247,7 +247,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param value field value
      */
-    public static void addFieldWhenGteMinusOne(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Integer value) {
+    public static void addFieldWhenGteMinusOne(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Integer value) {
         if (value != null && value >= -1) {
             sb.append(Q);
             jsonEncode(sb, fieldName);
@@ -262,7 +262,7 @@ public abstract class JsonWriteUtils {
      * @param value field value
      * @param gt the number the value must be greater than
      */
-    public static void addFieldWhenGreaterThan(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Integer value, int gt) {
+    public static void addFieldWhenGreaterThan(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Integer value, int gt) {
         if (value != null && value > gt) {
             sb.append(Q);
             jsonEncode(sb, fieldName);
@@ -276,7 +276,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param value field value
      */
-    public static void addField(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Long value) {
+    public static void addField(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Long value) {
         if (value != null && value >= 0) {
             sb.append(Q);
             jsonEncode(sb, fieldName);
@@ -290,7 +290,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param value field value
      */
-    public static void addFieldWhenGtZero(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Long value) {
+    public static void addFieldWhenGtZero(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Long value) {
         if (value != null && value > 0) {
             sb.append(Q);
             jsonEncode(sb, fieldName);
@@ -304,7 +304,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param value field value
      */
-    public static void addFieldWhenGteMinusOne(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Long value) {
+    public static void addFieldWhenGteMinusOne(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Long value) {
         if (value != null && value >= -1) {
             sb.append(Q);
             jsonEncode(sb, fieldName);
@@ -319,7 +319,7 @@ public abstract class JsonWriteUtils {
      * @param value field value
      * @param gt the number the value must be greater than
      */
-    public static void addFieldWhenGreaterThan(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Long value, long gt) {
+    public static void addFieldWhenGreaterThan(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Long value, long gt) {
         if (value != null && value > gt) {
             sb.append(Q);
             jsonEncode(sb, fieldName);
@@ -333,7 +333,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param value duration value
      */
-    public static void addFieldAsNanos(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Duration value) {
+    public static void addFieldAsNanos(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Duration value) {
         if (value != null && !value.isZero() && !value.isNegative()) {
             sb.append(Q);
             jsonEncode(sb, fieldName);
@@ -347,7 +347,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param zonedDateTime field value
      */
-    public static void addField(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable ZonedDateTime zonedDateTime) {
+    public static void addField(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable ZonedDateTime zonedDateTime) {
         if (zonedDateTime != null && !DEFAULT_TIME.equals(zonedDateTime)) {
             sb.append(Q);
             jsonEncode(sb, fieldName);
@@ -366,7 +366,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param map the map
      */
-    public static void addField(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Map<String, ?> map) {
+    public static void addField(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Map<String, ?> map) {
         if (map != null && !map.isEmpty()) {
             addField(sb, fieldName, instance(map));
         }
@@ -375,26 +375,6 @@ public abstract class JsonWriteUtils {
     // ----------------------------------------------------------------------------------------------------
     // ARRAYS / LISTS
     // ----------------------------------------------------------------------------------------------------
-    /**
-     * Interface used when adding a generic list
-     * @param <T> the type of list
-     */
-    public interface ListValueResolver<T> {
-        /**
-         * Whether the object in question is appendable. A null object would
-         * not be appendable, hence the default implementation
-         * @param t the object
-         * @return true for appendable
-         */
-        default boolean appendable(T t) { return t != null; }
-
-        /**
-         * Append the object's JSON value representation
-         * @param sb the target SringBuilder
-         * @param t the object
-         */
-        void append(StringBuilder sb, T t);
-    }
 
     /**
      * ListValueResolver implementation for a list of Strings
@@ -436,7 +416,7 @@ public abstract class JsonWriteUtils {
      * @param resolver the ListValueResolver
      * @param <T> the list type
      */
-    public static <T> void addArray(@NotNull StringBuilder sb, @NotNull String fieldName, @NotNull Collection<T> collection, @NotNull JsonWriteUtils.ListValueResolver<T> resolver) {
+    public static <T> void addArray(@NonNull StringBuilder sb, @NonNull String fieldName, @NonNull Collection<T> collection, @NonNull ListValueResolver<T> resolver) {
         sb.append(Q);
         jsonEncode(sb, fieldName);
         sb.append("\":[");
@@ -458,7 +438,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param array field value
      */
-    public static void addStrings(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable String... array) {
+    public static void addStrings(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable String... array) {
         if (array != null && array.length > 0) {
             addArray(sb, fieldName, Arrays.asList(array), STRING_LIST_RESOLVER);
         }
@@ -470,7 +450,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param collection field value
      */
-    public static void addStrings(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Collection<String> collection) {
+    public static void addStrings(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Collection<String> collection) {
         if (collection != null && !collection.isEmpty()) {
             addArray(sb, fieldName, collection, STRING_LIST_RESOLVER);
         }
@@ -482,7 +462,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param array field value
      */
-    public static void addIntegers(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Integer... array) {
+    public static void addIntegers(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Integer... array) {
         if (array != null && array.length > 0) {
             addArray(sb, fieldName, Arrays.asList(array), INT_LIST_RESOLVER);
         }
@@ -494,7 +474,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param collection field value
      */
-    public static void addIntegers(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Collection<Integer> collection) {
+    public static void addIntegers(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Collection<Integer> collection) {
         if (collection != null && !collection.isEmpty()) {
             addArray(sb, fieldName, collection, INT_LIST_RESOLVER);
         }
@@ -506,7 +486,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param array field value
      */
-    public static void addLongs(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Long... array) {
+    public static void addLongs(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Long... array) {
         if (array != null && array.length > 0) {
             addArray(sb, fieldName, Arrays.asList(array), LONG_LIST_RESOLVER);
         }
@@ -518,7 +498,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param collection field value
      */
-    public static void addLongs(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Collection<Long> collection) {
+    public static void addLongs(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Collection<Long> collection) {
         if (collection != null && !collection.isEmpty()) {
             addArray(sb, fieldName, collection, LONG_LIST_RESOLVER);
         }
@@ -530,7 +510,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param collection field value
      */
-    public static void addJsons(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Collection<? extends JsonSerializable> collection) {
+    public static void addJsons(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Collection<? extends JsonSerializable> collection) {
         if (collection != null && !collection.isEmpty()) {
             addArray(sb, fieldName, collection, (sbs, js) -> sbs.append(js.toJson()));
         }
@@ -542,7 +522,7 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @param durations list of durations
      */
-    public static void addDurations(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable Collection<Duration> durations) {
+    public static void addDurations(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable Collection<Duration> durations) {
         if (durations != null && !durations.isEmpty()) {
             addArray(sb, fieldName, durations, DURATION_LIST_RESOLVER);
         }
@@ -555,7 +535,7 @@ public abstract class JsonWriteUtils {
      * @param e the enum
      * @param <E> The enum type
      */
-    public static <E extends Enum<E>> void addEnum(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable E e) {
+    public static <E extends Enum<E>> void addEnum(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable E e) {
         if (e != null) {
             addField(sb, fieldName, e.toString());
         }
@@ -570,7 +550,7 @@ public abstract class JsonWriteUtils {
      * @param dontAddIfThis the enum not to match, may be null
      * @param <E> The enum type
      */
-    public static <E extends Enum<E>> void addEnumWhenNot(@NotNull StringBuilder sb, @NotNull String fieldName, @Nullable E e, @Nullable E dontAddIfThis) {
+    public static <E extends Enum<E>> void addEnumWhenNot(@NonNull StringBuilder sb, @NonNull String fieldName, @Nullable E e, @Nullable E dontAddIfThis) {
         if (e != null && e != dontAddIfThis) {
             addField(sb, fieldName, e.toString());
         }
@@ -585,8 +565,8 @@ public abstract class JsonWriteUtils {
      * @param c the class
      * @return the key string
      */
-    @NotNull
-    public static String toKey(@NotNull Class<?> c) {
+    @NonNull
+    public static String toKey(@NonNull Class<?> c) {
         return Q + c.getSimpleName() + QCOLON;
     }
 
@@ -595,8 +575,8 @@ public abstract class JsonWriteUtils {
      * @param fieldName the field name
      * @return the key string
      */
-    @NotNull
-    public static String toKey(@NotNull String fieldName) {
+    @NonNull
+    public static String toKey(@NonNull String fieldName) {
         return Q + fieldName + QCOLON;
     }
 
@@ -611,8 +591,8 @@ public abstract class JsonWriteUtils {
      * @param o the object
      * @return the formatted string
      */
-    @NotNull
-    public static String getFormatted(@NotNull Object o) {
+    @NonNull
+    public static String getFormatted(@NonNull Object o) {
         return getFormatted(o.toString());
     }
 
@@ -621,8 +601,8 @@ public abstract class JsonWriteUtils {
      * @param js a JsonSerializable object
      * @return the formatted string
      */
-    @NotNull
-    public static String getFormatted(@NotNull JsonSerializable js) {
+    @NonNull
+    public static String getFormatted(@NonNull JsonSerializable js) {
         return getFormatted(js.toJson());
     }
 
@@ -631,8 +611,8 @@ public abstract class JsonWriteUtils {
      * @param json the JSON string
      * @return the formatted string
      */
-    @NotNull
-    public static String getFormatted(@NotNull String json) {
+    @NonNull
+    public static String getFormatted(@NonNull String json) {
         StringBuilder sb = new StringBuilder();
         boolean begin_quotes = false;
 
@@ -692,7 +672,7 @@ public abstract class JsonWriteUtils {
      * Print the object to System.out, formatted for easy reading. Assumes the object's toString returns valid JSON.
      * @param o the object
      */
-    public static void printFormatted(@NotNull Object o) {
+    public static void printFormatted(@NonNull Object o) {
         System.out.println(getFormatted(o));
     }
 
@@ -700,7 +680,7 @@ public abstract class JsonWriteUtils {
      * Print the JSON to System.out, formatted for easy reading
      * @param js a JsonSerializable object
      */
-    public static void printFormatted(@NotNull JsonSerializable js) {
+    public static void printFormatted(@NonNull JsonSerializable js) {
         System.out.println(getFormatted(js));
     }
 
@@ -708,7 +688,7 @@ public abstract class JsonWriteUtils {
      * Print the string to System.out, formatted for easy reading. Assumes valid JSON
      * @param json the JSON string
      */
-    public static void printFormatted(@NotNull String json) {
+    public static void printFormatted(@NonNull String json) {
         System.out.println(getFormatted(json));
     }
 

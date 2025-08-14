@@ -1,4 +1,4 @@
-// Copyright 2020-2025 The NATS Authors
+// Copyright 2025 Synadia Communications, Inc.
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -14,8 +14,8 @@
 package io.synadia.json;
 
 import org.apache.commons.codec.binary.Base64;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -33,7 +33,7 @@ public abstract class Encoding {
      * @param input the input byte array to encode
      * @return the encoded byte array
      */
-    public static byte @NotNull [] base64BasicEncode(byte @NotNull [] input) {
+    public static byte @NonNull [] base64BasicEncode(byte @NonNull [] input) {
         return Base64.encodeBase64(input);
     }
 
@@ -42,8 +42,8 @@ public abstract class Encoding {
      * @param input the input byte array to encode
      * @return the encoded byte array
      */
-    @NotNull
-    public static String base64BasicEncodeToString(byte @NotNull [] input) {
+    @NonNull
+    public static String base64BasicEncodeToString(byte @NonNull [] input) {
         return Base64.encodeBase64String(input);
     }
 
@@ -52,8 +52,8 @@ public abstract class Encoding {
      * @param input the input byte array to encode
      * @return the encoded byte array
      */
-    @NotNull
-    public static String base64BasicEncodeToString(@NotNull String input) {
+    @NonNull
+    public static String base64BasicEncodeToString(@NonNull String input) {
         return Base64.encodeBase64String(input.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -63,8 +63,8 @@ public abstract class Encoding {
      * @param charset the charset of the input string
      * @return the encoded byte array
      */
-    @NotNull
-    public static String base64BasicEncodeToString(@NotNull String input, @NotNull Charset charset) {
+    @NonNull
+    public static String base64BasicEncodeToString(@NonNull String input, @NonNull Charset charset) {
         return Base64.encodeBase64String(input.getBytes(charset));
     }
 
@@ -73,7 +73,7 @@ public abstract class Encoding {
      * @param input the input byte array to encode
      * @return the encoded byte array
      */
-    public static byte @NotNull [] base64UrlEncode(byte @NotNull [] input) {
+    public static byte @NonNull [] base64UrlEncode(byte @NonNull [] input) {
         return Base64.encodeBase64URLSafe(input);
     }
 
@@ -82,8 +82,8 @@ public abstract class Encoding {
      * @param input the input byte array to encode
      * @return the encoded byte array
      */
-    @NotNull
-    public static String base64UrlEncodeToString(byte @NotNull [] input) {
+    @NonNull
+    public static String base64UrlEncodeToString(byte @NonNull [] input) {
         return Base64.encodeBase64URLSafeString(input);
     }
 
@@ -92,8 +92,8 @@ public abstract class Encoding {
      * @param input the input byte array to encode
      * @return the encoded byte array
      */
-    @NotNull
-    public static String base64UrlEncodeToString(@NotNull String input) {
+    @NonNull
+    public static String base64UrlEncodeToString(@NonNull String input) {
         return Base64.encodeBase64URLSafeString(input.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -103,8 +103,8 @@ public abstract class Encoding {
      * @param charset the charset of the input string
      * @return the encoded byte array
      */
-    @NotNull
-    public static String base64UrlEncodeToString(@NotNull String input, @NotNull Charset charset) {
+    @NonNull
+    public static String base64UrlEncodeToString(@NonNull String input, @NonNull Charset charset) {
         return Base64.encodeBase64URLSafeString(input.getBytes(charset));
     }
 
@@ -113,7 +113,7 @@ public abstract class Encoding {
      * @param input the input byte array to decode
      * @return the decoded byte array
      */
-    public static byte @NotNull [] base64BasicDecode(byte@NotNull [] input) {
+    public static byte @NonNull [] base64BasicDecode(byte@NonNull [] input) {
         return Base64.decodeBase64(input);
     }
 
@@ -122,7 +122,7 @@ public abstract class Encoding {
      * @param input the input string to decode
      * @return the decoded byte array
      */
-    public static byte @NotNull [] base64BasicDecode(@NotNull String input) {
+    public static byte @NonNull [] base64BasicDecode(@NonNull String input) {
         return Base64.decodeBase64(input);
     }
 
@@ -131,8 +131,8 @@ public abstract class Encoding {
      * @param input the input string to decode
      * @return the decoded string
      */
-    @NotNull
-    public static String base64BasicDecodeToString(@NotNull String input) {
+    @NonNull
+    public static String base64BasicDecodeToString(@NonNull String input) {
         return new String(Base64.decodeBase64(input), StandardCharsets.UTF_8);
     }
 
@@ -142,8 +142,8 @@ public abstract class Encoding {
      * @param charset the charset to use when decoding the decoded bytes to string
      * @return the decoded string
      */
-    @NotNull
-    public static String base64BasicDecodeToString(@NotNull String input, @NotNull Charset charset) {
+    @NonNull
+    public static String base64BasicDecodeToString(@NonNull String input, @NonNull Charset charset) {
         return new String(Base64.decodeBase64(input), charset);
     }
 
@@ -152,7 +152,7 @@ public abstract class Encoding {
      * @param input the input byte array to decode
      * @return the decoded byte array
      */
-    public static byte @NotNull [] base64UrlDecode(byte@NotNull [] input) {
+    public static byte @NonNull [] base64UrlDecode(byte@NonNull [] input) {
         return Base64.decodeBase64(input);
     }
 
@@ -161,8 +161,8 @@ public abstract class Encoding {
      * @param input the input byte array to decode
      * @return the decoded byte array
      */
-    @NotNull
-    public static String base64UrlDecodeToString(byte@NotNull [] input) {
+    @NonNull
+    public static String base64UrlDecodeToString(byte@NonNull [] input) {
         return new String(Base64.decodeBase64(input));
     }
 
@@ -171,7 +171,7 @@ public abstract class Encoding {
      * @param input the input string to decode
      * @return the decoded byte array
      */
-    public static byte @NotNull [] base64UrlDecode(@NotNull String input) {
+    public static byte @NonNull [] base64UrlDecode(@NonNull String input) {
         return Base64.decodeBase64(input);
     }
 
@@ -180,8 +180,8 @@ public abstract class Encoding {
      * @param input the input string to decode
      * @return the decoded string
      */
-    @NotNull
-    public static String base64UrlDecodeToString(@NotNull String input) {
+    @NonNull
+    public static String base64UrlDecodeToString(@NonNull String input) {
         return new String(Base64.decodeBase64(input));
     }
 
@@ -190,8 +190,8 @@ public abstract class Encoding {
      * @param s the input string
      * @return the decoded string
      */
-    @NotNull
-    public static String jsonDecode(@NotNull String s) {
+    @NonNull
+    public static String jsonDecode(@NonNull String s) {
         int len = s.length();
         StringBuilder sb = new StringBuilder(len);
         for (int x = 0; x < len; x++) {
@@ -243,7 +243,7 @@ public abstract class Encoding {
      * @param s the input string
      * @return the encoded string
      */
-    @NotNull
+    @NonNull
     public static String jsonEncode(@Nullable String s) {
         return s == null ? "" : jsonEncode(new StringBuilder(), s).toString();
     }
@@ -254,8 +254,8 @@ public abstract class Encoding {
      * @param s the input string
      * @return the encoded string as StringBuilder
      */
-    @NotNull
-    public static StringBuilder jsonEncode(@NotNull StringBuilder sb, @Nullable String s) {
+    @NonNull
+    public static StringBuilder jsonEncode(@NonNull StringBuilder sb, @Nullable String s) {
         int len = s == null ? 0 : s.length();
         for (int x = 0; x < len; x++) {
             char ch = s.charAt(x);
@@ -302,7 +302,7 @@ public abstract class Encoding {
      * @param source the input
      * @return the decoded URI
      */
-    public static String uriDecode(@NotNull String source) {
+    public static String uriDecode(@NonNull String source) {
         return URLDecoder.decode(source.replace("+", "%2B"), StandardCharsets.UTF_8);
     }
 }

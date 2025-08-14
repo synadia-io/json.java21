@@ -1,4 +1,4 @@
-// Copyright 2025 The NATS Authors
+// Copyright 2025 Synadia Communications, Inc.
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -13,8 +13,8 @@
 
 package io.synadia.json;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ public class MapBuilder implements JsonSerializable {
     /**
      * The JsonValue backing this MapBuilder
      */
-    @NotNull
+    @NonNull
     public final JsonValue jv;
 
     /**
@@ -41,7 +41,7 @@ public class MapBuilder implements JsonSerializable {
      * Get an instance of MapBuilder
      * @return a MapBuilder instance
      */
-    @NotNull
+    @NonNull
     public static MapBuilder instance() {
         return new MapBuilder();
     }
@@ -52,8 +52,8 @@ public class MapBuilder implements JsonSerializable {
      * @param value the value
      * @return the builder
      */
-    @NotNull
-    public MapBuilder put(@NotNull String key, @Nullable Object value) {
+    @NonNull
+    public MapBuilder put(@NonNull String key, @Nullable Object value) {
         //noinspection DataFlowIssue // NO ISSUE, WE KNOW jv.map is NOT NULL
         jv.map.put(key, JsonValue.instance(value));
         //noinspection DataFlowIssue // NO ISSUE, WE KNOW jv.mapOrder is NOT NULL
@@ -67,12 +67,14 @@ public class MapBuilder implements JsonSerializable {
      * @param map the map
      * @return the builder
      */
-    @NotNull
+    @NonNull
     public MapBuilder putEntries(@Nullable Map<String, ?> map) {
         if (map != null) {
-            for (String key : map.keySet()) {
+            for (Map.Entry<String, ?> entry : map.entrySet()) {
+                String key = entry.getKey();
                 //noinspection DataFlowIssue // NO ISSUE, WE KNOW jv.map is NOT NULL
-                jv.map.put(key, JsonValue.instance(map.get(key)));
+                jv.map.put(key, JsonValue.instance(entry.getValue()));
+                //noinspection DataFlowIssue // NO ISSUE, WE KNOW jv.mapOrder is NOT NULL
                 jv.mapOrder.add(key);
             }
         }
@@ -83,7 +85,7 @@ public class MapBuilder implements JsonSerializable {
      * {@inheritDoc}
      */
     @Override
-    @NotNull
+    @NonNull
     public String toJson() {
         return jv.toJson();
     }
@@ -92,7 +94,7 @@ public class MapBuilder implements JsonSerializable {
      * {@inheritDoc}
      */
     @Override
-    @NotNull
+    @NonNull
     public JsonValue toJsonValue() {
         return jv;
     }

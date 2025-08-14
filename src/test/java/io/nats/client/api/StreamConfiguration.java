@@ -1,0 +1,819 @@
+// Copyright 2025 Synadia Communications, Inc.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at:
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package io.nats.client.api;
+
+import io.synadia.json.JsonParseException;
+import io.synadia.json.JsonParser;
+import io.synadia.json.JsonSerializable;
+import io.synadia.json.JsonValue;
+import org.jspecify.annotations.NonNull;
+
+import java.time.Duration;
+import java.util.*;
+
+import static io.nats.client.support.ApiConstants.*;
+import static io.synadia.json.JsonValueUtils.*;
+import static io.synadia.json.JsonWriteUtils.*;
+
+public class StreamConfiguration implements JsonSerializable {
+
+    // see builder for defaults
+    private final String name;
+    private final String description;
+    private final List<String> subjects;
+    private final RetentionPolicy retentionPolicy;
+    private final CompressionOption compressionOption;
+    private final long maxConsumers;
+    private final long maxMsgs;
+    private final long maxMsgsPerSubject;
+    private final long maxBytes;
+    private final Duration maxAge;
+    private final int maxMsgSize;
+    private final StorageType storageType;
+    private final int replicas;
+    private final boolean noAck;
+    private final String templateOwner;
+    private final DiscardPolicy discardPolicy;
+    private final Duration duplicateWindow;
+    private final Placement placement;
+    private final Republish republish;
+    private final SubjectTransform subjectTransform;
+    private final ConsumerLimits consumerLimits;
+    private final Mirror mirror;
+    private final List<Source> sources;
+    private final boolean sealed;
+    private final boolean allowRollup;
+    private final boolean allowDirect;
+    private final boolean mirrorDirect;
+    private final boolean denyDelete;
+    private final boolean denyPurge;
+    private final boolean discardNewPerSubject;
+    private final Map<String, String> metadata;
+    private final long firstSequence;
+    private final boolean allowMessageTtl;
+    private final Duration subjectDeleteMarkerTtl;
+
+    static StreamConfiguration instance(JsonValue v) {
+        return new Builder()
+            .retentionPolicy(RetentionPolicy.get(readString(v, RETENTION)))
+            .compressionOption(CompressionOption.get(readString(v, COMPRESSION)))
+            .storageType(StorageType.get(readString(v, STORAGE)))
+            .discardPolicy(DiscardPolicy.get(readString(v, DISCARD)))
+            .name(readString(v, NAME))
+            .description(readString(v, DESCRIPTION))
+            .maxConsumers(readLong(v, MAX_CONSUMERS, -1))
+            .maxMessages(readLong(v, MAX_MSGS, -1))
+            .maxMessagesPerSubject(readLong(v, MAX_MSGS_PER_SUB, -1))
+            .maxBytes(readLong(v, MAX_BYTES, -1))
+            .maxAge(readNanosAsDuration(v, MAX_AGE))
+            .maximumMessageSize(readInteger(v, MAX_MSG_SIZE, -1))
+            .replicas(readInteger(v, NUM_REPLICAS, 1))
+            .noAck(readBoolean(v, NO_ACK, false))
+            .templateOwner(readString(v, TEMPLATE_OWNER))
+            .duplicateWindow(readNanosAsDuration(v, DUPLICATE_WINDOW))
+            .subjects(readStringListOrEmpty(v, SUBJECTS))
+            .placement(Placement.optionalInstance(readValue(v, PLACEMENT)))
+            .republish(Republish.optionalInstance(readValue(v, REPUBLISH)))
+            .subjectTransform(SubjectTransform.optionalInstance(readValue(v, SUBJECT_TRANSFORM)))
+            .consumerLimits(ConsumerLimits.optionalInstance(readValue(v, CONSUMER_LIMITS)))
+            .mirror(Mirror.optionalInstance(readValue(v, MIRROR)))
+            .sources(Source.optionalListOf(readValue(v, SOURCES)))
+            .sealed(readBoolean(v, SEALED, false))
+            .allowRollup(readBoolean(v, ALLOW_ROLLUP_HDRS, false))
+            .allowDirect(readBoolean(v, ALLOW_DIRECT, false))
+            .mirrorDirect(readBoolean(v, MIRROR_DIRECT, false))
+            .denyDelete(readBoolean(v, DENY_DELETE, false))
+            .denyPurge(readBoolean(v, DENY_PURGE, false))
+            .discardNewPerSubject(readBoolean(v, DISCARD_NEW_PER_SUBJECT, false))
+            .metadata(readStringMapOrNull(v, METADATA))
+            .firstSequence(readLong(v, FIRST_SEQ, 1))
+            .allowMessageTtl(readBoolean(v, ALLOW_MSG_TTL, false))
+            .subjectDeleteMarkerTtl(readNanosAsDuration(v, SUBJECT_DELETE_MARKER_TTL))
+            .build();
+    }
+
+    // For the builder, assumes all validations are already done in builder
+    StreamConfiguration(Builder b) {
+        this.name = b.name;
+        this.description = b.description;
+        this.subjects = b.subjects;
+        this.retentionPolicy = b.retentionPolicy;
+        this.compressionOption = b.compressionOption;
+        this.maxConsumers = b.maxConsumers;
+        this.maxMsgs = b.maxMsgs;
+        this.maxMsgsPerSubject = b.maxMsgsPerSubject;
+        this.maxBytes = b.maxBytes;
+        this.maxAge = b.maxAge;
+        this.maxMsgSize = b.maxMsgSize;
+        this.storageType = b.storageType;
+        this.replicas = b.replicas;
+        this.noAck = b.noAck;
+        this.templateOwner = b.templateOwner;
+        this.discardPolicy = b.discardPolicy;
+        this.duplicateWindow = b.duplicateWindow;
+        this.placement = b.placement;
+        this.republish = b.republish;
+        this.subjectTransform = b.subjectTransform;
+        this.consumerLimits = b.consumerLimits;
+        this.mirror = b.mirror;
+        this.sources = b.sources;
+        this.sealed = b.sealed;
+        this.allowRollup = b.allowRollup;
+        this.allowDirect = b.allowDirect;
+        this.mirrorDirect = b.mirrorDirect;
+        this.denyDelete = b.denyDelete;
+        this.denyPurge = b.denyPurge;
+        this.discardNewPerSubject = b.discardNewPerSubject;
+        this.metadata = b.metadata;
+        this.firstSequence = b.firstSequence;
+        this.allowMessageTtl = b.allowMessageTtl;
+        this.subjectDeleteMarkerTtl = b.subjectDeleteMarkerTtl;
+    }
+
+    /**
+     * Returns a StreamConfiguration deserialized from its JSON form.
+     *
+     * @see #toJson()
+     * @param json the json representing the Stream Configuration
+     * @return StreamConfiguration for the given json
+     * @throws JsonParseException thrown if the parsing fails for invalid json
+     */
+    public static StreamConfiguration instance(String json) throws JsonParseException {
+        return instance(JsonParser.parse(json));
+    }
+
+    /**
+     * Returns a JSON representation of this consumer configuration.
+     *
+     * @return json consumer configuration to send to the server.
+     */
+    @Override
+    @NonNull
+    public String toJson() {
+
+        StringBuilder sb = beginJson();
+
+        addField(sb, NAME, name);
+        addField(sb, DESCRIPTION, description);
+        addStrings(sb, SUBJECTS, subjects);
+        addField(sb, RETENTION, retentionPolicy.toString());
+        addEnumWhenNot(sb, COMPRESSION, compressionOption, CompressionOption.None);
+        addField(sb, MAX_CONSUMERS, maxConsumers);
+        addField(sb, MAX_MSGS, maxMsgs);
+        addField(sb, MAX_MSGS_PER_SUB, maxMsgsPerSubject);
+        addField(sb, MAX_BYTES, maxBytes);
+        addFieldAsNanos(sb, MAX_AGE, maxAge);
+        addField(sb, MAX_MSG_SIZE, maxMsgSize);
+        addField(sb, STORAGE, storageType.toString());
+        addField(sb, NUM_REPLICAS, replicas);
+        addField(sb, NO_ACK, noAck);
+        addField(sb, TEMPLATE_OWNER, templateOwner);
+        addField(sb, DISCARD, discardPolicy.toString());
+        addFieldAsNanos(sb, DUPLICATE_WINDOW, duplicateWindow);
+        if (placement != null && placement.hasData()) {
+            addField(sb, PLACEMENT, placement);
+        }
+        addField(sb, REPUBLISH, republish);
+        addField(sb, SUBJECT_TRANSFORM, subjectTransform);
+        addField(sb, CONSUMER_LIMITS, consumerLimits);
+        addField(sb, MIRROR, mirror);
+        addJsons(sb, SOURCES, sources);
+        addField(sb, SEALED, sealed);
+        addField(sb, ALLOW_ROLLUP_HDRS, allowRollup);
+        addField(sb, ALLOW_DIRECT, allowDirect);
+        addField(sb, MIRROR_DIRECT, mirrorDirect);
+        addField(sb, DENY_DELETE, denyDelete);
+        addField(sb, DENY_PURGE, denyPurge);
+        addField(sb, DISCARD_NEW_PER_SUBJECT, discardNewPerSubject);
+        addField(sb, METADATA, metadata);
+        addFieldWhenGreaterThan(sb, FIRST_SEQ, firstSequence, 1);
+        addField(sb, ALLOW_MSG_TTL, allowMessageTtl);
+        addFieldAsNanos(sb, SUBJECT_DELETE_MARKER_TTL, subjectDeleteMarkerTtl);
+
+        return endJson(sb).toString();
+    }
+
+    /**
+     * Creates a builder for the stream configuration.
+     * @return a stream configuration builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
+     * Creates a builder to copy the stream configuration.
+     * @param sc an existing StreamConfiguration
+     * @return a stream configuration builder
+     */
+    public static Builder builder(StreamConfiguration sc) {
+        return new Builder(sc);
+    }
+
+    /**
+     * StreamConfiguration is created using a Builder. The builder supports chaining and will
+     * create a default set of options if no methods are calls.
+     * 
+     * <p>{@code new StreamConfiguration.Builder().build()} will create a new StreamConfiguration.
+     * 
+     */
+    @SuppressWarnings("UnusedReturnValue")
+    public static class Builder {
+
+        private String name = null;
+        private String description = null;
+        private final List<String> subjects = new ArrayList<>();
+        private RetentionPolicy retentionPolicy = RetentionPolicy.Limits;
+        private CompressionOption compressionOption = CompressionOption.None;
+        private long maxConsumers = -1;
+        private long maxMsgs = -1;
+        private long maxMsgsPerSubject = -1;
+        private long maxBytes = -1;
+        private Duration maxAge = Duration.ZERO;
+        private int maxMsgSize = -1;
+        private StorageType storageType = StorageType.File;
+        private int replicas = 1;
+        private boolean noAck = false;
+        private String templateOwner = null;
+        private DiscardPolicy discardPolicy = DiscardPolicy.Old;
+        private Duration duplicateWindow = Duration.ZERO;
+        private Placement placement = null;
+        private Republish republish = null;
+        private SubjectTransform subjectTransform = null;
+        private ConsumerLimits consumerLimits = null;
+        private Mirror mirror = null;
+        private final List<Source> sources = new ArrayList<>();
+        private boolean sealed = false;
+        private boolean allowRollup = false;
+        private boolean allowDirect = false;
+        private boolean mirrorDirect = false;
+        private boolean denyDelete = false;
+        private boolean denyPurge = false;
+        private boolean discardNewPerSubject = false;
+        private Map<String, String> metadata;
+        private long firstSequence = 1;
+        private boolean allowMessageTtl = false;
+        private Duration subjectDeleteMarkerTtl;
+
+        /**
+         * Default Builder
+         */
+        public Builder() {}
+
+        /**
+         * Update Builder, useful if you need to update a configuration
+         * @param sc the configuration to copy
+         */
+        public Builder(StreamConfiguration sc) {
+            if (sc != null) {
+                this.name = sc.name;
+                this.description = sc.description;
+                subjects(sc.subjects);
+                this.retentionPolicy = sc.retentionPolicy;
+                this.compressionOption = sc.compressionOption;
+                this.maxConsumers = sc.maxConsumers;
+                this.maxMsgs = sc.maxMsgs;
+                this.maxMsgsPerSubject = sc.maxMsgsPerSubject;
+                this.maxBytes = sc.maxBytes;
+                this.maxAge = sc.maxAge;
+                this.maxMsgSize = sc.maxMsgSize;
+                this.storageType = sc.storageType;
+                this.replicas = sc.replicas;
+                this.noAck = sc.noAck;
+                this.templateOwner = sc.templateOwner;
+                this.discardPolicy = sc.discardPolicy;
+                this.duplicateWindow = sc.duplicateWindow;
+                this.placement = sc.placement;
+                this.republish = sc.republish;
+                this.subjectTransform = sc.subjectTransform;
+                this.consumerLimits = sc.consumerLimits;
+                this.mirror = sc.mirror;
+                sources(sc.sources);
+                this.sealed = sc.sealed;
+                this.allowRollup = sc.allowRollup;
+                this.allowDirect = sc.allowDirect;
+                this.mirrorDirect = sc.mirrorDirect;
+                this.denyDelete = sc.denyDelete;
+                this.denyPurge = sc.denyPurge;
+                this.discardNewPerSubject = sc.discardNewPerSubject;
+                if (sc.metadata != null) {
+                    this.metadata = new HashMap<>(sc.metadata);
+                }
+                this.firstSequence = sc.firstSequence;
+                this.allowMessageTtl = sc.allowMessageTtl;
+                this.subjectDeleteMarkerTtl = sc.subjectDeleteMarkerTtl;
+            }
+        }
+
+        /**
+         * Sets the name of the stream.
+         * @param name name of the stream.
+         * @return the builder
+         */
+        public Builder name(String name) {
+            this.name =  name;
+            return this;
+        }
+
+        /**
+         * Sets the description
+         * @param description the description
+         * @return the builder
+         */
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        /**
+         * Sets the subjects in the StreamConfiguration.
+         * @param subjects the stream's subjects
+         * @return The Builder
+         */
+        public Builder subjects(String... subjects) {
+            this.subjects.clear();
+            return addSubjects(subjects);
+        }
+
+        /**
+         * Sets the subjects in the StreamConfiguration.
+         * @param subjects the stream's subjects
+         * @return The Builder
+         */
+        public Builder subjects(Collection<String> subjects) {
+            this.subjects.clear();
+            return addSubjects(subjects);
+        }
+
+        /**
+         * Adds unique subjects into the StreamConfiguration.
+         * @param subjects the stream's subjects to add
+         * @return The Builder
+         */
+        public Builder addSubjects(String... subjects) {
+            if (subjects != null) {
+                return addSubjects(Arrays.asList(subjects));
+            }
+            return this;
+        }
+
+        /**
+         * Adds unique subjects into the StreamConfiguration.
+         * @param subjects the stream's subjects to add
+         * @return The Builder
+         */
+        public Builder addSubjects(Collection<String> subjects) {
+            if (subjects != null) {
+                for (String sub : subjects) {
+                    if (sub != null && !this.subjects.contains(sub)) {
+                        this.subjects.add(sub);
+                    }
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Sets the retention policy in the StreamConfiguration.
+         * @param policy the retention policy of the StreamConfiguration
+         * @return The Builder
+         */
+        public Builder retentionPolicy(RetentionPolicy policy) {
+            this.retentionPolicy = policy == null ? RetentionPolicy.Limits : policy;
+            return this;
+        }
+
+        /**
+         * Sets the compression option in the StreamConfiguration.
+         * @param compressionOption the compression option of the StreamConfiguration
+         * @return The Builder
+         */
+        public Builder compressionOption(CompressionOption compressionOption) {
+            this.compressionOption = compressionOption == null ? CompressionOption.None : compressionOption;
+            return this;
+        }
+
+        /**
+         * Sets the maximum number of consumers in the StreamConfiguration.
+         * @param maxConsumers the maximum number of consumers
+         * @return The Builder
+         */        
+        public Builder maxConsumers(long maxConsumers) {
+            this.maxConsumers = maxConsumers;
+            return this;
+        }
+
+        /**
+         * Sets the maximum number of messages in the StreamConfiguration.
+         * @param maxMsgs the maximum number of messages
+         * @return The Builder
+         */
+        public Builder maxMessages(long maxMsgs) {
+            this.maxMsgs = maxMsgs;
+            return this;
+        }
+
+        /**
+         * Sets the maximum number of message per subject in the StreamConfiguration.
+         * @param maxMsgsPerSubject the maximum number of messages
+         * @return The Builder
+         */
+        public Builder maxMessagesPerSubject(long maxMsgsPerSubject) {
+            this.maxMsgsPerSubject = maxMsgsPerSubject;
+            return this;
+        }
+
+        /**
+         * Sets the maximum number of bytes in the StreamConfiguration.
+         * @param maxBytes the maximum number of bytes
+         * @return The Builder
+         */
+        public Builder maxBytes(long maxBytes) {
+            this.maxBytes = maxBytes;
+            return this;
+        }
+
+        /**
+         * Sets the maximum age in the StreamConfiguration.
+         * @param maxAge the maximum message age
+         * @return The Builder
+         */
+        public Builder maxAge(Duration maxAge) {
+            this.maxAge = maxAge;
+            return this;
+        }
+
+        /**
+         * Sets the maximum age in the StreamConfiguration.
+         * @param maxAgeMillis the maximum message age
+         * @return The Builder
+         */
+        public Builder maxAge(long maxAgeMillis) {
+            this.maxAge = Duration.ofMillis(maxAgeMillis);
+            return this;
+        }
+
+        /**
+         * Sets the maximum message size in the StreamConfiguration.
+         * @deprecated the server value is a 32-bit signed value. Use {@link #maximumMessageSize(int)} instead.
+         * @param maxMsgSize the maximum message size
+         * @return The Builder
+         */
+        @Deprecated
+        public Builder maxMsgSize(long maxMsgSize) {
+            this.maxMsgSize = (int)maxMsgSize;
+            return this;
+        }
+
+        /**
+         * Sets the maximum message size in the StreamConfiguration.
+         * @param maxMsgSize the maximum message size
+         * @return The Builder
+         */
+        public Builder maximumMessageSize(int maxMsgSize) {
+            this.maxMsgSize = (int)maxMsgSize;
+            return this;
+        }
+
+        /**
+         * Sets the storage type in the StreamConfiguration.
+         * @param storageType the storage type
+         * @return The Builder
+         */        
+        public Builder storageType(StorageType storageType) {
+            this.storageType = storageType == null ? StorageType.File : storageType;
+            return this;
+        }
+
+        /**
+         * Sets the number of replicas a message must be stored on in the StreamConfiguration.
+         * Must be 1 to 5 inclusive
+         * @param replicas the number of replicas to store this message on
+         * @return The Builder
+         */
+        public Builder replicas(int replicas) {
+            this.replicas = replicas;
+            return this;
+        }
+
+        /**
+         * Sets the acknowledgement mode of the StreamConfiguration.  if no acknowledgements are
+         * set, then acknowledgements are not sent back to the client.  The default is false.
+         * @param noAck true to disable acknowledgements.
+         * @return The Builder
+         */        
+        public Builder noAck(boolean noAck) {
+            this.noAck = noAck;
+            return this;
+        }
+
+        /**
+         * Sets the template a stream in the form of raw JSON.
+         * @param templateOwner the stream template of the stream.
+         * @return the builder
+         */
+        public Builder templateOwner(String templateOwner) {
+            this.templateOwner = templateOwner == null || templateOwner.trim().isEmpty() ? null : templateOwner;
+            return this;
+        }
+
+        /**
+         * Sets the discard policy in the StreamConfiguration.
+         * @param policy the discard policy of the StreamConfiguration
+         * @return The Builder
+         */
+        public Builder discardPolicy(DiscardPolicy policy) {
+            this.discardPolicy = policy == null ? DiscardPolicy.Old : policy;
+            return this;
+        }
+
+        /**
+         * Sets the duplicate checking window in the StreamConfiguration.  A Duration.Zero
+         * disables duplicate checking.  Duplicate checking is disabled by default.
+         * @param window duration to hold message ids for duplicate checking.
+         * @return The Builder
+         */
+        public Builder duplicateWindow(Duration window) {
+            this.duplicateWindow = window;
+            return this;
+        }
+
+        /**
+         * Sets the duplicate checking window in the StreamConfiguration.  A Duration.Zero
+         * disables duplicate checking.  Duplicate checking is disabled by default.
+         * @param windowMillis duration to hold message ids for duplicate checking.
+         * @return The Builder
+         */
+        public Builder duplicateWindow(long windowMillis) {
+            this.duplicateWindow = Duration.ofMillis(windowMillis);
+            return this;
+        }
+
+        /**
+         * Sets the placement directive object
+         * @param placement the placement directive object
+         * @return The Builder
+         */
+        public Builder placement(Placement placement) {
+            this.placement = placement;
+            return this;
+        }
+
+        /**
+         * Sets the republish config object
+         * @param republish the republish config object
+         * @return The Builder
+         */
+        public Builder republish(Republish republish) {
+            this.republish = republish;
+            return this;
+        }
+
+        /**
+         * Sets the subjectTransform config object
+         * @param subjectTransform the subjectTransform config object
+         * @return The Builder
+         */
+        public Builder subjectTransform(SubjectTransform subjectTransform) {
+            this.subjectTransform = subjectTransform;
+            return this;
+        }
+
+        /**
+         * Sets the consumerLimits config object
+         * @param consumerLimits the consumerLimits config object
+         * @return The Builder
+         */
+        public Builder consumerLimits(ConsumerLimits consumerLimits) {
+            this.consumerLimits = consumerLimits;
+            return this;
+        }
+
+        /**
+         * Sets the mirror  object
+         * @param mirror the mirror object
+         * @return The Builder
+         */
+        public Builder mirror(Mirror mirror) {
+            this.mirror = mirror;
+            return this;
+        }
+
+        /**
+         * Sets the sources in the StreamConfiguration.
+         * @param sources the stream's sources
+         * @return The Builder
+         */
+        public Builder sources(Source... sources) {
+            this.sources.clear();
+            return addSources(sources);
+        }
+
+        /**
+         * Add the sources into the StreamConfiguration.
+         * @param sources the stream's sources
+         * @return The Builder
+         */
+        public Builder sources(Collection<Source> sources) {
+            this.sources.clear();
+            return addSources(sources);
+        }
+
+        /**
+         * Add the sources into the StreamConfiguration.
+         * @param sources the stream's sources
+         * @return The Builder
+         */
+        public Builder addSources(Source... sources) {
+            return addSources(Arrays.asList(sources));
+        }
+
+        /**
+         * Sets the sources in the StreamConfiguration.
+         * @param sources the stream's sources
+         * @return The Builder
+         */
+        public Builder addSources(Collection<Source> sources) {
+            if (sources != null) {
+                for (Source source : sources) {
+                    if (source != null && !this.sources.contains(source)) {
+                        this.sources.add(source);
+                    }
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Add a source into the StreamConfiguration.
+         * @param source a stream source
+         * @return The Builder
+         */
+        public Builder addSource(Source source) {
+            if (source != null && !this.sources.contains(source)) {
+                this.sources.add(source);
+            }
+            return this;
+        }
+
+        /**
+         * Set whether to seal the stream.
+         * INTERNAL USE ONLY. Scoped protected for test purposes.
+         * @param sealed the sealed setting
+         * @return The Builder
+         */
+        protected Builder sealed(boolean sealed) {
+            this.sealed = sealed;
+            return this;
+        }
+
+        /**
+         * Set whether to allow the rollup feature for a stream
+         * @param allowRollup the allow rollup setting
+         * @return The Builder
+         */
+        public Builder allowRollup(boolean allowRollup) {
+            this.allowRollup = allowRollup;
+            return this;
+        }
+
+        /**
+         * Set whether to allow direct message access for a stream
+         * @param allowDirect the allow direct setting
+         * @return The Builder
+         */
+        public Builder allowDirect(boolean allowDirect) {
+            this.allowDirect = allowDirect;
+            return this;
+        }
+
+        /**
+         * Set whether to allow unified direct access for mirrors
+         * @param mirrorDirect the allow direct setting
+         * @return The Builder
+         */
+        public Builder mirrorDirect(boolean mirrorDirect) {
+            this.mirrorDirect = mirrorDirect;
+            return this;
+        }
+
+        /**
+         * Set whether to deny deleting messages from the stream
+         * @param denyDelete the deny delete setting
+         * @return The Builder
+         */
+        public Builder denyDelete(boolean denyDelete) {
+            this.denyDelete = denyDelete;
+            return this;
+        }
+
+        /**
+         * Set whether to deny purging messages from the stream
+         * @param denyPurge the deny purge setting
+         * @return The Builder
+         */
+        public Builder denyPurge(boolean denyPurge) {
+            this.denyPurge = denyPurge;
+            return this;
+        }
+
+        /**
+         * Set whether discard policy new with max message per subject applies to existing subjects, not just new subjects.
+         * @param discardNewPerSubject the setting
+         * @return The Builder
+         */
+        public Builder discardNewPerSubject(boolean discardNewPerSubject) {
+            this.discardNewPerSubject = discardNewPerSubject;
+            return this;
+        }
+
+        /**
+         * Set this stream to be sealed. This is irreversible.
+         * @return The Builder
+         */
+        public Builder seal() {
+            this.sealed = true;
+            return this;
+        }
+
+        /**
+         * Sets the metadata for the configuration
+         * @param metadata the metadata map
+         * @return The Builder
+         */
+        public Builder metadata(Map<String, String> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
+        /**
+         * Sets the first sequence to be used. 1 is the default. All values less than 2 are treated as 1.
+         * @param firstSeq specify the first_seq in the stream config when creating the stream.
+         * @return The Builder
+         */
+        public Builder firstSequence(long firstSeq) {
+            this.firstSequence = firstSeq > 1 ? firstSeq : 1;
+            return this;
+        }
+
+        /**
+         * Set to allow per message TTL to true
+         * @return The Builder
+         */
+        public Builder allowMessageTtl() {
+            this.allowMessageTtl = true;
+            return this;
+        }
+
+        /**
+         * Set allow per message TTL flag
+         * @param allowMessageTtl the flag
+         * @return The Builder
+         */
+        public Builder allowMessageTtl(boolean allowMessageTtl) {
+            this.allowMessageTtl = allowMessageTtl;
+            return this;
+        }
+
+        /**
+         * Set the subject delete marker TTL duration. Server accepts 1 second or more.
+         * null has the effect of clearing the subject delete marker TTL
+         * @param subjectDeleteMarkerTtl the TTL duration
+         * @return The Builder
+         */
+        public Builder subjectDeleteMarkerTtl(Duration subjectDeleteMarkerTtl) {
+            this.subjectDeleteMarkerTtl = subjectDeleteMarkerTtl;
+            return this;
+        }
+
+        /**
+         * Set the subject delete marker TTL duration in milliseconds. Server accepts 1 second or more.
+         * 0 or less has the effect of clearing the subject delete marker TTL
+         * @param subjectDeleteMarkerTtlMillis the TTL duration in milliseconds
+         * @return The Builder
+         */
+        public Builder subjectDeleteMarkerTtl(long subjectDeleteMarkerTtlMillis) {
+            this.subjectDeleteMarkerTtl = Duration.ofMillis(subjectDeleteMarkerTtlMillis);
+            return this;
+        }
+
+        /**
+         * Builds the StreamConfiguration
+         * @return a stream configuration.
+         */
+        public StreamConfiguration build() {
+            return new StreamConfiguration(this);
+        }
+    }
+}

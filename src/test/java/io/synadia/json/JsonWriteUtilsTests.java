@@ -1,4 +1,4 @@
-// Copyright 2025 The NATS Authors
+// Copyright 2025 Synadia Communications, Inc.
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -13,7 +13,7 @@
 
 package io.synadia.json;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -390,7 +390,7 @@ public final class JsonWriteUtilsTests {
             }
 
             @Override
-            public @NotNull String toJson() {
+            public @NonNull String toJson() {
                 return "\"" + FN + "\":\"" + s + "\"";
             }
         }

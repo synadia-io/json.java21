@@ -1,4 +1,4 @@
-// Copyright 2025 The NATS Authors
+// Copyright 2025 Synadia Communications, Inc.
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -61,14 +61,14 @@ public final class JsonValueUtilsTests {
 
     @Test
     public void testRead() {
-        assertNotNull(read(TEST_JV, STRING, v -> v));
+        assertNotNull(read(TEST_JV, STRING, null, v -> v));
 
         // these JsonValues are not MAPS
-        assertNull(read(null, NOT_A_KEY, v -> v));
-        assertNull(read(EMPTY_ARRAY, NOT_A_KEY, v -> v));
-        assertNull(read(TRUE, NOT_A_KEY, v -> v));
-        assertNull(read(FALSE, NOT_A_KEY, v -> v));
-        assertNull(read(NULL, NOT_A_KEY, v -> v));
+        assertNull(read(null, NOT_A_KEY, null, v -> v));
+        assertNull(read(EMPTY_ARRAY, NOT_A_KEY, null, v -> v));
+        assertNull(read(TRUE, NOT_A_KEY, null, v -> v));
+        assertNull(read(FALSE, NOT_A_KEY, null, v -> v));
+        assertNull(read(NULL, NOT_A_KEY, null, v -> v));
     }
 
     @Test
@@ -126,6 +126,7 @@ public final class JsonValueUtilsTests {
     @Test
     public void testReadInteger() {
         Integer i = readInteger(TEST_JV, INTEGER);
+        assertNotNull(i);
         assertEquals(42, i);
 
         assertNull(readInteger(TEST_JV, STRING));
